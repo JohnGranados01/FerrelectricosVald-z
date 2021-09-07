@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clientes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"><!-- Clase de bootsrap CSS-->
-</head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  </head>
 <body>
   <nav class="navbar navbar-light" style="background-color: #C2824F;">
     <div class="container-fluid">
@@ -46,9 +47,115 @@
       </div>
     </div>
   </nav>
-    <div class="container">
+  <div class="container">
+    <br>
+    <h5 style="text-align: center;">Ingrese los datos para consultar Cliente</h5>
+    <!-- <form class="needs-validation" novalidate> -->
+      <form>
+      <div class="row">
+        <!-- <div class="col-md-4 position-absulute">
+          <label for="criterioBusqueda" class="form-label">Seleccione el criterio de busqueda:</label>
+          <select class="form-select" id="criterioBusqueda" required>
+            option>Identificación cliente</option>
+            <option>...</option> 
+          </select>
+          <div class="valid-feedback">
+            Datos Correctos!
+          </div>
+          <div class="invalid-feedback">
+            Datos Incorrectos!
+          </div>
+        </div> -->
+        <!-- <div class="row">
+          <div class="col-sm">
+            <button class="btn btn-warning" type="button" onclick="showClientesId()">Consultar</button>
+          </div>
+        </div> -->
+        <br>
+        <div class="col-md-4 position-absulute">
+          <label for="id" class="form-label">Diguite el número de busqueda:</label>
+          <input type="number" class="form-control" id="id" placeholder="C.C." required>
+          <div class="valid-feedback">
+            Datos Correctos!.
+          </div>
+          <div class="invalid-feedback">
+            Datos Incorrectos!.
+          </div>
+        <br>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-sm">
+            <button class="btn btn-warning" type="button" onclick="showClientesId()">Consultar</button>
+          </div>
+        </div>
+        <br>
+        
+        
+      </div>
+        
+      <br>
+      
+      
+    </form>
+    <br>
+    <p id="table">
 
+    </p>
+    <br>
+    <div class="form-row">   
+      <div class="form-group">
+          <button type="submit" onclick="cargarDatos()" class="btn btn-warning form-control">Mirar Clientes</button>
+      </div>
     </div>
+    <br>
+    <table class="table caption-top">
+      <thead class="table-secondary">
+        <tr>
+          <th> Id Cliente </th>
+          <th scope="col"> Nombre </th>
+          <th scope="col"> Direccion </th>
+          <th scope="col"> Telefono </th>
+          <th scope="col"> Ciudad</th>
+          <p id="table2">
+
+          </p>
+          </tr>
+    </thead>
+    </table>
+<!-- 
+    <div class="row">
+      <div class="col-md-6">
+        <label for="nombreCliente" class="form-label">Nombre del cliente:</label>
+        <label id="nombreCliente"></label>
+      </div>
+      <div class="col-md-6">
+        <label for="id" class="form-label">Identificación:</label>
+        <label id="id">si o no</label>
+      </div>
+    </div>
+    <div class="row"> -->
+      <!-- <div class="col-md-6">
+        <label for="fecha" class="form-label">Fecha:</label>
+        <label id="fecha">si o no</label>
+      </div> -->
+      <!-- <div class="col-md-6">
+        <label for="direccion" class="form-label">Dirección:</label>
+        <input id="direccion">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="telefono" class="form-label">Telefono:</label>
+        <input id="telefono">
+      </div>
+      <div class="col-md-6">
+        <label for="ciudad" class="form-label">Ciudad:</label>
+        <input id="ciudad">
+      </div>
+    </div> -->
+    <br>
+  </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
     <script src="logica/cliente.js"></script> <!-- Clase de Logica para Cliente-->

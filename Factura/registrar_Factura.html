@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Facturas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"><!-- Clase de bootsrap CSS-->
-</head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  </head>
 <body>
   <nav class="navbar navbar-light" style="background-color: #C2824F;">
     <div class="container-fluid">
@@ -50,26 +51,27 @@
     <div class="container">
         <br>
         <h5 style="text-align: center;">Ingrese los datos para registrar factura</h5>
-        <form class="needs-validation" novalidate>
+        <!-- <form class="needs-validation" novalidate> -->
+          <form id="form">
           <div class="row g-3">
             <div class="col-md-4 position-absulute">
               <label for="nombre" class="form-label">Nombre del cliente:</label>
-              <input type="text" class="form-control" id="nombre" required>
+              <input type="text" class="form-control" id="nombre" placeholder="Nombre" required>
               <div class="valid-feedback">
-                Looks good!
+                Campos validos.
               </div>
               <div class="invalid-feedback">
-                Please choose a unique and valid username.
+                Campo Requerido.
               </div>
             </div>
             <div class="col-md-4 position-absulute">
               <label for="id" class="form-label">Identificación:</label>
-              <input type="number" class="form-control" id="id" required>
+              <input type="number" class="form-control" id="id" placeholder="C.C." required>
               <div class="valid-feedback">
-                Looks good!
+                Campos validos.
               </div>
               <div class="invalid-feedback">
-                Please choose a unique and valid username.
+                Campo Requerido.
               </div>
             </div>
           </div>
@@ -78,44 +80,44 @@
               <label for="fecha" class="form-label">Fecha:</label>
               <div class="input-group has-validation">
                 <input type="date" class="form-control" id="fecha" aria-describedby="validationTooltipUsernamePrepend" required>
-                <div class="invalid-feedback">
-                  Please choose a unique and valid username.
-                </div>
                 <div class="valid-feedback">
-                  Looks good!
+                  Campos validos.
+                </div>
+                <div class="invalid-feedback">
+                  Campo Requerido.
                 </div>
               </div>
               </div>
             <div class="col-md-4 position-absulute">
               <label for="direccion" class="form-label">Dirección:</label>
-              <input type="text" class="form-control" id="direccion" required>
-              <div class="invalid-feedback">
-                Please provide a valid city.
-              </div>
+              <input type="text" class="form-control" id="direccion" placeholder="Dirección" required>
               <div class="valid-feedback">
-                Looks good!
+                Campos validos.
+              </div>
+              <div class="invalid-feedback">
+                Campo Requerido.
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-4 position-absulute">
               <label for="telefono" class="form-label">Telefono:</label>
-              <input type="number" class="form-control" id="telefono" required>
-              <div class="invalid-feedback">
-                Please select a valid state.
-              </div>
+              <input type="number" class="form-control" id="telefono" placeholder="Telefono" required>
               <div class="valid-feedback">
-                Looks good!
+                Campos validos.
+              </div>
+              <div class="invalid-feedback">
+                Campo Requerido.
               </div>
             </div>
             <div class="col-md-4 position-absulute">
               <label for="ciudad" class="form-label">Ciudad</label>
-              <input type="text" class="form-control" id="ciudad" required>
-              <div class="invalid-feedback">
-                Please provide a valid zip.
-              </div>
+              <input type="text" class="form-control" id="ciudad" placeholder="Ciudad" required>
               <div class="valid-feedback">
-                Looks good!
+                Campos validos.
+              </div>
+              <div class="invalid-feedback">
+                Campo Requerido.
               </div>
             </div>
           </div>
@@ -123,11 +125,19 @@
           <br>
         <div class="row">
           <div class="col-sm">
-            <button class="btn btn-warning" type="submit">Registrar</button>
+            <button class="btn btn-warning" type="button" onclick="registrar()">Registrar</button>
           </div>
         </div>
+        
           
         </form>
+
+        <div class="form-group col-sm">
+          <br>
+          <p id="table">
+            
+          </p>
+        </div>
         <br>
         <table class="table">
           <thead class="table-secondary">
