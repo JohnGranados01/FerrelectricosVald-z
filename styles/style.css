@@ -1,0 +1,28 @@
+body{
+     margin: 0;
+     padding: 0;
+     text-align: center;
+}
+
+input[type="text"], input[type="password"]{
+  outline: none;
+  padding: 20px;
+  display: block;
+  width: 300px;
+  border-radius: 3px;
+  border: 1px solid #eee;
+  margin: 20px auto;
+}
+
+header {
+     border-bottom: 2px solid #eee;
+     padding: 20px 0;
+     margin-bottom: 10px;
+     width: 100%;
+     text-align: center;
+     background-color: #C2824F;
+   }
+   header a {
+     text-decoration: white;
+     color: black;
+   }
