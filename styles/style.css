@@ -21,8 +21,14 @@ header {
      width: 100%;
      text-align: center;
      background-color: #C2824F;
-   }
-   header a {
+}
+
+header a {
      text-decoration: white;
      color: black;
-   }
+}
+
+img {
+  width: 50%;
+  height: 50%;
+}

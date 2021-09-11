@@ -57,7 +57,7 @@
       <input name="usuario" type="text" placeholder="Ingrese su usuario" required>
       <input name="password" type="password" placeholder="Ingresa la contraseña" required>
       <input name="confirmar_password" type="password" placeholder="Confirma tu contraseña" required>
-      <button type="submit" class="btn btn-warning" onclick="validatePasssword()">Registrar</button>
+      <button type="submit" class="btn btn-warning">Registrar</button>
     </form>
     <script src="scripts/script.js"></script>
 </body>
