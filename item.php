@@ -15,6 +15,23 @@
             $user = $results;
         }
     }
+
+    $conexion = mysqli_connect('localhost', 'root', '', 'ferrelectricosvaldez') or die(mysql_error($mysqli));
+          
+    insertar($conexion);
+    function insertar($conexion){
+      $id = $_POST['idProducto'];
+      $nombre = $_POST['nombre'];
+      $descripcion = $_POST['descripcion'];
+      $cantidad = $_POST['cantidad'];
+      $precio = $_POST['precio'];
+      
+      $consulta = "INSERT INTO item(id, nombre, descripcion, cantidad, precio)
+      VALUES('$id', '$nombre', '$descripcion', '$cantidad', '$precio')";
+      mysqli_query($conexion, $consulta);
+      mysqli_close($conexion);
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -76,14 +93,24 @@
         <br>
         <form class="row g-3 needs-validation" action="item.php" method="POST" novalidate>
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-2">
+              <label for="nombre" class="form-label">Id:</label>
+              <input type="text" class="form-control" id="id" placeholder="Ingrese el id del producto" name="idProducto" aria-describedby="inputGroupPrepend2" required>
+              <div class="valid-feedback">
+                Bien!
+              </div>
+              <div class="invalid-feedback">
+                Debe rellenar los campos para registrar el ítem
+              </div>
+            </div>     
+            <div class="col-sm-4">
               <label for="nombre" class="form-label">Nombre:</label>
               <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre del producto" name="nombre" aria-describedby="inputGroupPrepend2" required>
               <div class="valid-feedback">
                 Bien!
               </div>
               <div class="invalid-feedback">
-                Ingrese lo que se le pide, por favor!
+                Debe rellenar los campos para registrar el ítem
               </div>
             </div>
             <div class="col-sm">
@@ -99,7 +126,7 @@
                 Bien!
               </div>
               <div class="invalid-feedback">
-                Ingrese lo que se le pide, por favor!
+              Debe rellenar los campos para registrar el ítem
               </div>
             </div>
             <div class="col-sm">
@@ -109,13 +136,15 @@
                 Bien!
               </div>
               <div class="invalid-feedback">
-                Ingrese lo que se le pide, por favor!
+                Debe rellenar los campos para registrar el ítem
               </div>
             </div>
           </div>
-          <br>
+          <div></div>
           <div class="row">
-            <div class="col-sm">
+            <div class="col-sm-5">
+          </div>
+            <div class="col-sm-4">
               <button class="btn btn-warning" type="submit">Guardar</button>
             </div>
           </div>
