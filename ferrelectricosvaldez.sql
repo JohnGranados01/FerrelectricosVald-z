@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 13-09-2021 a las 00:53:42
--- Versión del servidor: 5.7.31
--- Versión de PHP: 7.3.21
+-- Servidor: 127.0.0.1:3308
+-- Tiempo de generación: 18-09-2021 a las 03:58:26
+-- Versión del servidor: 5.7.28
+-- Versión de PHP: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -45,7 +46,8 @@ CREATE TABLE IF NOT EXISTS `cliente` (
 INSERT INTO `cliente` (`identificacion`, `nombre`, `apellidos`, `direccion`, `correo`, `telefono`) VALUES
 (23582089, 'quien pregunta', 'Granados Salamanca', 'cll 11 B # 17-13', 'jhon.granados@uptc.edu.co', 333),
 (1057610935, 'john', 'Granados Salamanca', 'cll 11 B # 17-13', 'jhon.granados@uptc.edu.co', 333),
-(1, 'lina', 'Granados Salamanca', 'cll 11 B # 17-13', 'jhongranadossalamanca@gmail.com', 333);
+(1, 'lina', 'Granados Salamanca', 'cll 11 B # 17-13', 'jhongranadossalamanca@gmail.com', 333),
+(9873, 'milton', 'granaods', 'uyr', 'jh@f.com', 321456);
 
 -- --------------------------------------------------------
 
@@ -75,7 +77,8 @@ INSERT INTO `item` (`Id`, `nombre`, `descripcion`, `cantidad`, `precio`) VALUES
 ('2335', 'alambre', 'pieza de cobre', 1, 32000),
 ('987', 'silicona', '2', 2, 2),
 ('33', 'pegante', 'boxer', 1, 2500),
-('1002', 'cinta', '', 1, 3000);
+('1002', 'cinta', '', 1, 3000),
+('111', 'jabon', '', 78, 1500);
 
 -- --------------------------------------------------------
 
