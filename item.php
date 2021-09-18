@@ -16,22 +16,24 @@
         }
     }
 
-    $conexion = mysqli_connect('localhost', 'root', '', 'ferrelectricosvaldez') or die(mysql_error($mysqli));
-          
-    insertar($conexion);
-    function insertar($conexion){
-      $id = $_POST['idProducto'];
-      $nombre = $_POST['nombre'];
-      $descripcion = $_POST['descripcion'];
-      $cantidad = $_POST['cantidad'];
-      $precio = $_POST['precio'];
-      
-      $consulta = "INSERT INTO item(id, nombre, descripcion, cantidad, precio)
-      VALUES('$id', '$nombre', '$descripcion', '$cantidad', '$precio')";
-      mysqli_query($conexion, $consulta);
-      mysqli_close($conexion);
+    if(isset($_POST['addItem_btn'])){
+      require 'database.php';
+      $message='';
+      if(!empty($_POST['nombre']) && !empty($_POST['cantidad']) && !empty($_POST['precio'])){
+        $sql = "INSERT INTO item (id, nombre, descripcion, cantidad, precio) VALUES (:id, :nombre, :descripcion, :cantidad, :precio)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $_POST['id']);
+        $stmt->bindParam(':nombre', $_POST['nombre']);
+        $stmt->bindParam(':descripcion', $_POST['descripcion']);
+        $stmt->bindParam(':cantidad', $_POST['cantidad']);
+        $stmt->bindParam(':precio', $_POST['precio']);
+        if ($stmt->execute()) {
+          $message = 'Item Creado Satisfactoriamente!';
+          } else {
+            $message = 'Lamentablemente no se pudo crear el Item!';
+        }
+      }
     }
-
 ?>
 
 <!DOCTYPE html>
@@ -90,19 +92,20 @@
       <br>
       <div class="container">
         <h5 style="text-align: center;">Ingrese los datos para agregar Items</h5>
+        <hr>
         <br>
         <form class="row g-3 needs-validation" action="item.php" method="POST" novalidate>
           <div class="row">
-            <div class="col-sm-2">
-              <label for="nombre" class="form-label">Id:</label>
-              <input type="text" class="form-control" id="id" placeholder="Ingrese el id del producto" name="idProducto" aria-describedby="inputGroupPrepend2" required>
+          <div class="col-sm-4">
+              <label for="id" class="form-label">Identificacion:</label>
+              <input type="text" class="form-control" id="id" placeholder="Ingrese el Id del producto" name="id" aria-describedby="inputGroupPrepend2" required>
               <div class="valid-feedback">
                 Bien!
               </div>
               <div class="invalid-feedback">
-                Debe rellenar los campos para registrar el ítem
+                Ingrese lo que se le pide, por favor!
               </div>
-            </div>     
+            </div>
             <div class="col-sm-4">
               <label for="nombre" class="form-label">Nombre:</label>
               <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre del producto" name="nombre" aria-describedby="inputGroupPrepend2" required>
@@ -110,10 +113,10 @@
                 Bien!
               </div>
               <div class="invalid-feedback">
-                Debe rellenar los campos para registrar el ítem
+                Ingrese lo que se le pide, por favor!
               </div>
             </div>
-            <div class="col-sm">
+            <div class="col-sm-4">
               <label for="descripcion" class="form-label">Descripcion:</label>
               <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder=".....">
             </div>
@@ -126,7 +129,7 @@
                 Bien!
               </div>
               <div class="invalid-feedback">
-              Debe rellenar los campos para registrar el ítem
+                Ingrese lo que se le pide, por favor!
               </div>
             </div>
             <div class="col-sm">
@@ -136,19 +139,94 @@
                 Bien!
               </div>
               <div class="invalid-feedback">
-                Debe rellenar los campos para registrar el ítem
+                Ingrese lo que se le pide, por favor!
               </div>
             </div>
           </div>
-          <div></div>
+          <br>
           <div class="row">
-            <div class="col-sm-5">
-          </div>
-            <div class="col-sm-4">
-              <button class="btn btn-warning" type="submit">Guardar</button>
+            <div class="col-sm">
+              <button class="btn btn-warning" type="submit" name="addItem_btn">Guardar</button>
+            </div>
+            <div class="col-sm">
+              <button class="btn btn-warning" type="reset">Borrar</button>
             </div>
           </div>
         </form>
+        <br>
+    <?php if(!empty($message)): ?>
+      <div class="alert alert-warning" role="alert">
+      <?= $message ?>
+      </div>
+      <?php endif; ?>
+    <br>
+        <h5 style="text-align: center;">Ingrese los datos para Consultar Item</h5>
+        <hr>
+        <br>
+        <form class="row g-3 needs-validation" action="item.php" method="POST" novalidate>
+          <div class="row">
+            <div class="col-sm-6">
+              <label for="nombre" class="form-label">Nombre:</label>
+              <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre del producto" name="nombre" aria-describedby="inputGroupPrepend2" required>
+              <div class="valid-feedback">
+                Datos Correctos!
+              </div>
+              <div class="invalid-feedback">
+                Ingrese lo que se le pide, por favor!
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+              <button class="btn btn-warning" type="submit" name="serchItem_btn">Buscar</button>
+            </div>
+            <div class="col-sm">
+              <button class="btn btn-warning" type="reset">Borrar</button>
+            </div>
+          </div>
+        </form>
+        <table class="table caption-top">
+      <thead class="table-secondary">
+        <tr>
+          <th scope="col"> Id Item </th>
+          <th scope="col"> Item </th>
+          <th scope="col"> Descripcion </th>
+          <th scope="col"> Cantidad </th>
+          <th scope="col"> Precio</th>
+          </tr>
+      </thead>
+      <tbody>
+        <?php
+          require 'database.php';
+          $nombre= ( empty($_POST['nombre']) ) ? NULL : $_POST['nombre'];
+          if(!empty($nombre)){
+            $consulta = $conn->query("SELECT * FROM item WHERE nombre = '$nombre'");
+            foreach($consulta as $result){
+              echo "<tr>
+              <td>".$result['Id']."</td>";
+                  echo "<td>". $result['nombre']."</td>";
+                  echo "<td>". $result['descripcion']."</td>";
+                  echo "<td>". $result['cantidad']."</td>";
+                  echo "<td>". $result['precio']."</td>";
+                  echo "<tr>";
+            }
+          }else{
+            $consulta = $conn->query("SELECT * FROM item");
+            foreach($consulta as $result){
+              echo "<tr>
+              <td>".$result['Id']."</td>";
+                  echo "<td>". $result['nombre']."</td>";
+                  echo "<td>". $result['descripcion']."</td>";
+                  echo "<td>". $result['cantidad']."</td>";
+                  echo "<td>". $result['precio']."</td>";
+                  echo "<tr>"; 
+            }
+          }
+          
+        ?>
+      </tbody>
+      </table>
+      <br>
         </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script><!-- Clase de bootsrap Bundle-->
     <script src="logica/item.js"></script>

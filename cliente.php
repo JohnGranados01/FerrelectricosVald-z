@@ -1,43 +1,39 @@
 
 <?php
-    session_start();
-
-    require 'database.php';
-
-    if(isset($_SESSION['user_id'])){
-        $records = $conn->prepare('SELECT id, usuario, password FROM users WHERE id = :id ');
-        $records->bindParam(':id', $_SESSION['user_id']);
-        $records->execute();
-        $results = $records->fetch(PDO::FETCH_ASSOC);
-
-        $user = null;
-
-        if (count($results) > 0) {
-            $user = $results;
-        }
-    }
-
-    $message='';
-
-    $id = $_GET['identificacion'];
-    $nombre = $_GET['nombre'];
-    $apellidos = $_GET['apellidos'];
-    $direccion = $_GET['direccion'];
-    $correo = $_GET['correo'];
-    $telefono = $_GET['telefono'];
+  session_start();
+  require 'database.php';
     
-    if (!empty($id)) {
+    if(isset($_SESSION['user_id'])){
+      $records = $conn->prepare('SELECT id, usuario, password FROM users WHERE id = :id ');
+      $records->bindParam(':id', $_SESSION['user_id']);
+      $records->execute();
+      $results = $records->fetch(PDO::FETCH_ASSOC);
 
-            $sql = "INSERT INTO cliente VALUES ('$id', '$nombre', '$apellidos', '$direccion', '$correo', '$telefono')";
-            $stmt = $conn->prepare($sql);
-            if ($stmt->execute()) {
-                $message = 'Cliente Creado Satisfactoriamente!';
-            } else {
-                $message = 'Lamentablemente no se pudeo crear el Cliente!';
-            }
+      $user = null;
+
+      if (count($results) > 0) {
+          $user = $results;
+      }
+    }
+    if(isset($_POST['addCliente_btn'])){
+      require 'database.php';
+      $message='';
+      if(!empty($_POST['identificacion'])){
+        $sql = "INSERT INTO cliente (identificacion, nombre, apellidos, direccion, correo, telefono) VALUES (:identificacion, :nombre, :apellidos, :direccion, :correo, :telefono)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':identificacion', $_POST['identificacion']);
+        $stmt->bindParam(':nombre', $_POST['nombre']);
+        $stmt->bindParam(':apellidos', $_POST['apellidos']);
+        $stmt->bindParam(':direccion', $_POST['direccion']);
+        $stmt->bindParam(':correo', $_POST['correo']);
+        $stmt->bindParam(':telefono', $_POST['telefono']);
+        if ($stmt->execute()) {
+            $message = 'Cliente Creado Satisfactoriamente!';
         } else {
-            $message = 'Lo siento, no se que pasa!';
+            $message = 'Lamentablemente no se pudo crear el Cliente!';
         }
+      }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -98,10 +94,11 @@
   <div class="container">
     <br>
     <h5 style="text-align: center;">Ingrese los datos para agregar Cliente</h5>
+    <hr>
     <br>
-    <form class="row g-3 needs-validation" action="cliente.php" method="POST" novalidate>
+    <form class="row needs-validation" action="cliente.php" method="POST" novalidate>
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm">
           <label for="identificacion" class="form-label">Identificación:</label>
           <input type="number" class="form-control" id="identificacion" placeholder="C.C., NIT, RUT..." name="identificacion" aria-describedby="inputGroupPrepend2" required>
           <div class="valid-feedback">
@@ -169,7 +166,7 @@
       <br>
       <div class="row">
         <div class="col-sm-6">
-          <button class="btn btn-warning" type="submit">Guardar</button>
+          <button class="btn btn-warning" type="submit" name="addCliente_btn">Guardar</button>
         </div>
         <div class="col-sm-6">
           <button class="btn btn-warning" type="reset">Borrar</button>
@@ -184,54 +181,92 @@
       <?php endif; ?>
     <br>
     <h5 style="text-align: center;">Ingrese los datos para consultar Cliente</h5>
-      <form>
-      <div class="row">
-        <br>
-        <div class="col-md-4 position-absulute">
-          <label for="id" class="form-label">Diguite el número de busqueda:</label>
-          <input type="number" class="form-control" id="id" placeholder="C.C." required>
-          <div class="valid-feedback">
-            Datos Correctos!.
-          </div>
-          <div class="invalid-feedback">
-            Datos Incorrectos!.
-          </div>
-        <br>
-        </div>
-        <br>
+    <hr>
+    <br>
+      <form class="row needs-validation" action="cliente.php" method="POST" novalidate>
         <div class="row">
           <div class="col-sm">
-            <button class="btn btn-warning" type="button" onclick="showClientesId()">Consultar</button>
+            <label for="identificacion" class="form-label">Diguite el número de busqueda:</label>
+            <input type="number" class="form-control" id="identificacion" name="identificacion" placeholder="C.C., NIT, RUT...">
+            <div class="valid-feedback">
+              Datos Correctos!.
+            </div>
+          <div class="col-sm">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese Nombre">
+            <div class="valid-feedback">
+            Datos Correctos!.
+            </div>
           </div>
-        </div>
+          </div>
         <br>
+      <div class="row">   
+        <div class="col-sm-6">
+            <button type="submit" class="btn btn-warning form-control" name="serchCliente_btn">Consultar</button>
+        </div>
+        <div class="col-sm-6">
+            <button type="reset" class="btn btn-warning form-control">Borrar</button>
+        </div>
       </div>
-      <br>
     </form>
     <br>
-    <p id="table">
-
-    </p>
-    <br>
-    <div class="form-row">   
-      <div class="form-group">
-          <button type="submit" onclick="cargarDatos()" class="btn btn-warning form-control">Mirar Clientes</button>
-      </div>
-    </div>
-    <br>
+    <?php endif; ?>
     <table class="table caption-top">
       <thead class="table-secondary">
         <tr>
-          <th> Id Cliente </th>
+          <th scope="col"> Id Cliente </th>
           <th scope="col"> Nombre </th>
-          <th scope="col"> Direccion </th>
-          <th scope="col"> Telefono </th>
-          <th scope="col"> Ciudad</th>
-          <p id="table2">
-
-          </p>
+          <th scope="col"> Apellidos </th>
+          <th scope="col"> Dirección </th>
+          <th scope="col"> Correo</th>
+          <th scope="col"> Telefono</th>
           </tr>
-    </thead>
+      </thead>
+      <tbody>
+    <br>
+    <?php 
+        require 'database.php';
+        $id= ( empty($_POST['identificacion']) ) ? NULL : $_POST['identificacion'];
+        $nombre= ( empty($_POST['nombre']) ) ? NULL : $_POST['nombre'];
+        if(!empty($id)){
+          $consulta = $conn->query("SELECT * FROM cliente WHERE identificacion = '$id'");
+          foreach($consulta as $result){
+            echo "<tr>
+            <td>".$result['identificacion']."</td>";
+                echo "<td>". $result['nombre']."</td>";
+                echo "<td>". $result['apellidos']."</td>";
+                echo "<td>". $result['direccion']."</td>";
+                echo "<td>". $result['correo']."</td>";
+                echo "<td>". $result['telefono']."</td>";
+                echo "<tr>";
+          }
+        }else if(!empty($nombre)){
+          $consulta = $conn->query("SELECT * FROM cliente WHERE nombre = '$nombre'");
+          foreach($consulta as $result){
+            echo "<tr>
+            <td>".$result['identificacion']."</td>";
+                echo "<td>". $result['nombre']."</td>";
+                echo "<td>". $result['apellidos']."</td>";
+                echo "<td>". $result['direccion']."</td>";
+                echo "<td>". $result['correo']."</td>";
+                echo "<td>". $result['telefono']."</td>";
+                echo "<tr>";
+          } 
+        }else{
+          $consulta = $conn->query('SELECT * FROM cliente');
+          foreach($consulta as $result){
+            echo "<tr>
+            <td>".$result['identificacion']."</td>";
+                echo "<td>". $result['nombre']."</td>";
+                echo "<td>". $result['apellidos']."</td>";
+                echo "<td>". $result['direccion']."</td>";
+                echo "<td>". $result['correo']."</td>";
+                echo "<td>". $result['telefono']."</td>";
+                echo "<tr>";
+        } 
+      }
+    ?> 
+      </tbody>
     </table>
     <br>
   </div>
@@ -240,7 +275,6 @@
     <script src="logica/cliente.js"></script> <!-- Clase de Logica para Cliente-->
     <script src="scripts/script.js"></script> <!-- Clase de script para cliente-->
 </body>
-<?php endif; ?>
 <br>
 <footer style="background-color: #000000;">
   <div class="container">
