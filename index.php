@@ -59,10 +59,10 @@
                     Factura
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
-                    <li><a class="dropdown-item" href="Factura/registrar_Factura.html" target="_blank">Registrar Factura</a></li>
-                    <li><a class="dropdown-item" href="Factura/consultar_Factura.html" target="_blank">Consular Factura</a></li>
-                    <li><a class="dropdown-item" href="Factura/eliminar_Factura.html" target="_blank">Eliminar Factura</a></li>
-                    <li><a class="dropdown-item" href="Factura/ver_Factura.html" target="_blank">Ver Factura</a></li>
+                    <li><a class="dropdown-item" href="Factura/registrar_Factura.php" target="_blank">Registrar Factura</a></li>
+                    <li><a class="dropdown-item" href="Factura/consultar_Factura.php" target="_blank">Consular Factura</a></li>
+                    <li><a class="dropdown-item" href="Factura/eliminar_Factura.php" target="_blank">Eliminar Factura</a></li>
+                    <li><a class="dropdown-item" href="Factura/ver_Factura.php" target="_blank">Ver Factura</a></li>
                 </ul>
                 </li>
                 <li class="nav-item">

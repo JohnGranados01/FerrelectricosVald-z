@@ -19,13 +19,12 @@
     if(isset($_POST['addItem_btn'])){
       require 'database.php';
       $message='';
-      if(!empty($_POST['nombre']) && !empty($_POST['cantidad']) && !empty($_POST['precio'])){
-        $sql = "INSERT INTO item (id, nombre, descripcion, cantidad, precio) VALUES (:id, :nombre, :descripcion, :cantidad, :precio)";
+      if(!empty($_POST['nombre']) && !empty($_POST['precio'])){
+        $sql = "INSERT INTO item (id, nombre, descripcion, precio) VALUES (:id, :nombre, :descripcion, :precio)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':id', $_POST['id']);
         $stmt->bindParam(':nombre', $_POST['nombre']);
         $stmt->bindParam(':descripcion', $_POST['descripcion']);
-        $stmt->bindParam(':cantidad', $_POST['cantidad']);
         $stmt->bindParam(':precio', $_POST['precio']);
         if ($stmt->execute()) {
           $message = 'Item Creado Satisfactoriamente!';
@@ -75,10 +74,10 @@
                     Factura
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
-                    <li><a class="dropdown-item" href="Factura/registrar_Factura.html" target="_blank">Registrar Factura</a></li>
-                    <li><a class="dropdown-item" href="Factura/consultar_Factura.html" target="_blank">Consular Factura</a></li>
-                    <li><a class="dropdown-item" href="Factura/eliminar_Factura.html" target="_blank">Eliminar Factura</a></li>
-                    <li><a class="dropdown-item" href="Factura/ver_Factura.html" target="_blank">Ver Factura</a></li>
+                    <li><a class="dropdown-item" href="Factura/registrar_Factura.php" target="_blank">Registrar Factura</a></li>
+                    <li><a class="dropdown-item" href="Factura/consultar_Factura.php" target="_blank">Consular Factura</a></li>
+                    <li><a class="dropdown-item" href="Factura/eliminar_Factura.php" target="_blank">Eliminar Factura</a></li>
+                    <li><a class="dropdown-item" href="Factura/ver_Factura.php" target="_blank">Ver Factura</a></li>
                   </ul>
                 </li>
                 <li class="nav-item">
@@ -96,7 +95,7 @@
         <br>
         <form class="row g-3 needs-validation" action="item.php" method="POST" novalidate>
           <div class="row">
-          <div class="col-sm-4">
+            <div class="col-sm-4">
               <label for="id" class="form-label">Identificacion:</label>
               <input type="text" class="form-control" id="id" placeholder="Ingrese el Id del producto" name="id" aria-describedby="inputGroupPrepend2" required>
               <div class="valid-feedback">
@@ -116,23 +115,13 @@
                 Ingrese lo que se le pide, por favor!
               </div>
             </div>
-            <div class="col-sm-4">
-              <label for="descripcion" class="form-label">Descripcion:</label>
-              <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder=".....">
-            </div>
           </div>
           <div class="row">
-            <div class="col-sm">
-              <label for="cantidad" class="form-label">Cantidad:</label>
-              <input type="number" class="form-control" id="cantidad" placeholder="Ingrese Cantidad" name="cantidad" required>
-              <div class="valid-feedback">
-                Bien!
-              </div>
-              <div class="invalid-feedback">
-                Ingrese lo que se le pide, por favor!
-              </div>
+            <div class="col-sm-4">
+                <label for="descripcion" class="form-label">Descripcion:</label>
+                <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder=".....">
             </div>
-            <div class="col-sm">
+            <div class="col-sm-4">
               <label for="precio" class="form-label">Precio:</label>
               <input type="number" class="form-control" id="precio" name="precio" placeholder="$" required>
               <div class="valid-feedback">
@@ -167,7 +156,7 @@
           <div class="row">
             <div class="col-sm-6">
               <label for="nombre" class="form-label">Nombre:</label>
-              <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre del producto" name="nombre" aria-describedby="inputGroupPrepend2" required>
+              <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre del producto" name="nombre" aria-describedby="inputGroupPrepend2">
               <div class="valid-feedback">
                 Datos Correctos!
               </div>
@@ -191,7 +180,6 @@
           <th scope="col"> Id Item </th>
           <th scope="col"> Item </th>
           <th scope="col"> Descripcion </th>
-          <th scope="col"> Cantidad </th>
           <th scope="col"> Precio</th>
           </tr>
       </thead>
@@ -200,13 +188,12 @@
           require 'database.php';
           $nombre= ( empty($_POST['nombre']) ) ? NULL : $_POST['nombre'];
           if(!empty($nombre)){
-            $consulta = $conn->query("SELECT * FROM item WHERE nombre = '$nombre'");
+            $consulta = $conn->query("SELECT * FROM item WHERE nombre LIKE '%$nombre%'");
             foreach($consulta as $result){
               echo "<tr>
               <td>".$result['Id']."</td>";
                   echo "<td>". $result['nombre']."</td>";
                   echo "<td>". $result['descripcion']."</td>";
-                  echo "<td>". $result['cantidad']."</td>";
                   echo "<td>". $result['precio']."</td>";
                   echo "<tr>";
             }
@@ -217,7 +204,6 @@
               <td>".$result['Id']."</td>";
                   echo "<td>". $result['nombre']."</td>";
                   echo "<td>". $result['descripcion']."</td>";
-                  echo "<td>". $result['cantidad']."</td>";
                   echo "<td>". $result['precio']."</td>";
                   echo "<tr>"; 
             }
