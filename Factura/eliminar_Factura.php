@@ -2,27 +2,20 @@
 
     session_start(); 
 
-    if (isset($_SESSION['user_id'])) {
-        header('Location: /FacturacionWeb2');
-      }
+    require '../database.php';
 
-    require 'database.php';
+    if(isset($_SESSION['user_id'])){
+      $records = $conn->prepare('SELECT id, usuario, password FROM users WHERE id = :id ');
+      $records->bindParam(':id', $_SESSION['user_id']);
+      $records->execute();
+      $results = $records->fetch(PDO::FETCH_ASSOC);
 
-    if (!empty($_POST['usuario']) && !empty($_POST['password'])) {
-        $records = $conn->prepare('SELECT id, usuario, password FROM users WHERE usuario = :usuario');
-        $records->bindParam(':usuario', $_POST['usuario']);
-        $records->execute();
-        $results = $records->fetch(PDO::FETCH_ASSOC);
-    
-        $message = '';
-    
-        if (count($results) > 0 && password_verify($_POST['password'], $results['password'])) {
-          $_SESSION['user_id'] = $results['id'];
-          header("Location: /FacturacionWeb2");
-        } else {
-          $message = 'Lo siento, no se encontraron coincidencias!';
-        }
+      $user = null;
+
+      if (count($results) > 0) {
+          $user = $results;
       }
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
