@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3308
--- Tiempo de generación: 18-09-2021 a las 03:58:26
+-- Tiempo de generación: 30-09-2021 a las 01:10:17
 -- Versión del servidor: 5.7.28
 -- Versión de PHP: 7.3.12
 
@@ -52,6 +52,36 @@ INSERT INTO `cliente` (`identificacion`, `nombre`, `apellidos`, `direccion`, `co
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `comprobante`
+--
+
+DROP TABLE IF EXISTS `comprobante`;
+CREATE TABLE IF NOT EXISTS `comprobante` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `fecha` date NOT NULL,
+  `cliente` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detallecompra`
+--
+
+DROP TABLE IF EXISTS `detallecompra`;
+CREATE TABLE IF NOT EXISTS `detallecompra` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `comprobanteId` int(10) NOT NULL,
+  `itemId` int(10) NOT NULL,
+  `cantidad` int(10) NOT NULL,
+  `total` int(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `item`
 --
 
@@ -60,7 +90,6 @@ CREATE TABLE IF NOT EXISTS `item` (
   `Id` varchar(12) NOT NULL,
   `nombre` varchar(30) NOT NULL,
   `descripcion` varchar(150) NOT NULL,
-  `cantidad` int(200) NOT NULL,
   `precio` int(10) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -68,17 +97,19 @@ CREATE TABLE IF NOT EXISTS `item` (
 -- Volcado de datos para la tabla `item`
 --
 
-INSERT INTO `item` (`Id`, `nombre`, `descripcion`, `cantidad`, `precio`) VALUES
-('345', 'gvh', 'gcvhn', 56, 45),
-('345', 'puntilla', 'gcvhn', 56, 463),
-('123', 'metro', 'gcvhn', 2, 300),
-('678', 'chazo', 'pieza de acero inoxidable', 1, 70),
-('1002', 'pintura', 'vinilo', 2, 4567),
-('2335', 'alambre', 'pieza de cobre', 1, 32000),
-('987', 'silicona', '2', 2, 2),
-('33', 'pegante', 'boxer', 1, 2500),
-('1002', 'cinta', '', 1, 3000),
-('111', 'jabon', '', 78, 1500);
+INSERT INTO `item` (`Id`, `nombre`, `descripcion`, `precio`) VALUES
+('345', 'gvh', 'gcvhn', 45),
+('345', 'puntilla', 'gcvhn', 463),
+('123', 'metro', 'gcvhn', 300),
+('678', 'chazo', 'pieza de acero inoxidable', 70),
+('1002', 'pintura', 'vinilo', 4567),
+('2335', 'alambre', 'pieza de cobre', 32000),
+('987', 'silicona', '2', 2),
+('33', 'pegante', 'boxer', 2500),
+('1002', 'cinta', '', 3000),
+('111', 'jabon', '', 1500),
+('098765', 'boxer para delincuentes', 'malo para la salud', 2000),
+('1q', 'peganteas', 's', 213);
 
 -- --------------------------------------------------------
 
