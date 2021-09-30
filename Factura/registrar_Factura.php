@@ -15,7 +15,22 @@
       if (count($results) > 0) {
           $user = $results;
       }
-  }
+    }
+    
+    if(isset($_POST['addComprobante_btn'])){
+      $message='';
+      $sql = "INSERT INTO comprobante (fecha, clienteNombre) VALUES (:fecha, :clienteNombre)";
+      $stmt = $conn->prepare($sql);
+      $stmt->bindParam(':fecha', $_POST['fecha']);
+      $stmt->bindParam(':clienteNombre', $_POST['clienteNombre']);
+      if ($stmt->execute()) {
+        $message = 'Comprobante Creado Satisfactoriamente!';
+      } else {
+        $message = 'Lamentablemente no se pudo crear el Comprobante!';
+      }
+    }
+
+                
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,11 +87,20 @@
         <br>
         <h5 style="text-align: center;">Ingrese los datos para registrar factura</h5>
         <!-- <form class="needs-validation" novalidate> -->
-          <form id="form">
+          <form class="row g-3 needs-validation" action="registrar_Factura.php" method="POST" novalidate>
           <div class="row g-3">
             <div class="col-md-4 position-absulute">
-              <label for="nombre" class="form-label">Nombre del cliente:</label>
-              <input type="text" class="form-control" id="nombre" placeholder="Nombre" required>
+              <label for="clienteNombre" class="form-label">Cliente:</label>
+              <select class="form-select" name="clienteNombre" required>
+                <option value="">OBLIGATORIO</option>
+                <?php
+                  require '../database.php';
+                  $consulta = $conn->query("SELECT nombre FROM cliente");
+                  foreach($consulta as $resultado){
+                    echo '<option value="'.$resultado['nombre'].'">'.$resultado['nombre'].'</option>';
+                  }
+                ?>
+              </select>
               <div class="valid-feedback">
                 Campos validos.
               </div>
@@ -84,18 +108,6 @@
                 Campo Requerido.
               </div>
             </div>
-            <div class="col-md-4 position-absulute">
-              <label for="id" class="form-label">Identificación:</label>
-              <input type="number" class="form-control" id="id" placeholder="C.C." required>
-              <div class="valid-feedback">
-                Campos validos.
-              </div>
-              <div class="invalid-feedback">
-                Campo Requerido.
-              </div>
-            </div>
-          </div>
-          <div class="row">
             <div class="col-md-4 position-absulute">
               <label for="fecha" class="form-label">Fecha:</label>
               <div class="input-group has-validation">
@@ -107,51 +119,25 @@
                   Campo Requerido.
                 </div>
               </div>
-              </div>
-            <div class="col-md-4 position-absulute">
-              <label for="direccion" class="form-label">Dirección:</label>
-              <input type="text" class="form-control" id="direccion" placeholder="Dirección" required>
-              <div class="valid-feedback">
-                Campos validos.
-              </div>
-              <div class="invalid-feedback">
-                Campo Requerido.
-              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 position-absulute">
-              <label for="telefono" class="form-label">Telefono:</label>
-              <input type="number" class="form-control" id="telefono" placeholder="Telefono" required>
-              <div class="valid-feedback">
-                Campos validos.
-              </div>
-              <div class="invalid-feedback">
-                Campo Requerido.
-              </div>
-            </div>
-            <div class="col-md-4 position-absulute">
-              <label for="ciudad" class="form-label">Ciudad</label>
-              <input type="text" class="form-control" id="ciudad" placeholder="Ciudad" required>
-              <div class="valid-feedback">
-                Campos validos.
-              </div>
-              <div class="invalid-feedback">
-                Campo Requerido.
-              </div>
-            </div>
-          </div>
-            
+          </div> 
           <br>
         <div class="row">
           <div class="col-sm">
-            <button class="btn btn-warning" type="button" onclick="registrar()">Registrar</button>
+            <button class="btn btn-warning" type="submit" name="addComprobante_btn">Registrar</button>
+          </div>
+          <div class="col-sm">
+            <button class="btn btn-warning" type="reset">Borrar</button>
           </div>
         </div>
-        
-          
         </form>
-
+        <br>
+    <?php if(!empty($message)): ?>
+      <div class="alert alert-warning" role="alert">
+      <?= $message ?>
+      </div>
+      <?php endif; ?>
+    <br>
         <div class="form-group col-sm">
           <br>
           <p id="table">

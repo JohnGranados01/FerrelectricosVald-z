@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3308
--- Tiempo de generación: 30-09-2021 a las 01:10:17
+-- Tiempo de generación: 30-09-2021 a las 03:50:08
 -- Versión del servidor: 5.7.28
 -- Versión de PHP: 7.3.12
 
@@ -59,8 +59,9 @@ DROP TABLE IF EXISTS `comprobante`;
 CREATE TABLE IF NOT EXISTS `comprobante` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `fecha` date NOT NULL,
-  `cliente` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
+  `idCliente` int(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idCliente` (`idCliente`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -76,7 +77,9 @@ CREATE TABLE IF NOT EXISTS `detallecompra` (
   `itemId` int(10) NOT NULL,
   `cantidad` int(10) NOT NULL,
   `total` int(30) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `comprobanteId` (`comprobanteId`),
+  KEY `itemId` (`itemId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
