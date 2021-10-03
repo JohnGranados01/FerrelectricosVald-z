@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3308
--- Tiempo de generación: 30-09-2021 a las 03:50:08
+-- Tiempo de generación: 03-10-2021 a las 04:11:39
 -- Versión del servidor: 5.7.28
 -- Versión de PHP: 7.3.12
 
@@ -62,7 +62,45 @@ CREATE TABLE IF NOT EXISTS `comprobante` (
   `idCliente` int(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idCliente` (`idCliente`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `comprobante`
+--
+
+INSERT INTO `comprobante` (`id`, `fecha`, `idCliente`) VALUES
+(1, '2021-09-01', 1057610935),
+(2, '2021-09-07', 1057610935),
+(3, '2021-10-01', 1057610935),
+(4, '2021-10-01', 2),
+(5, '2021-10-01', 2),
+(6, '2021-10-01', 2),
+(7, '2021-10-01', 2),
+(8, '2021-10-01', 2),
+(9, '2021-10-01', 2),
+(10, '2021-10-02', 1057610935),
+(11, '2021-10-02', 23582089),
+(12, '2021-10-02', 23582089),
+(13, '2021-10-02', 23582089),
+(14, '2021-10-02', 23582089),
+(15, '2021-10-02', 1057610935),
+(16, '2021-10-02', 1057610935),
+(17, '2021-10-02', 1),
+(18, '2021-10-02', 1),
+(19, '2021-10-02', 1),
+(20, '2021-10-02', 9873),
+(21, '2021-10-02', 9873),
+(22, '2021-10-02', 9873),
+(23, '2021-10-02', 1),
+(24, '2021-10-02', 1057610935),
+(25, '2021-10-02', 1057610935),
+(26, '2021-10-03', 1057610935),
+(27, '2021-10-03', 1057610935),
+(28, '2021-10-03', 1057610935),
+(29, '2021-10-03', 1057610935),
+(30, '2021-10-03', 1),
+(31, '2021-10-03', 9873),
+(32, '2021-10-03', 1057610935);
 
 -- --------------------------------------------------------
 
@@ -80,7 +118,15 @@ CREATE TABLE IF NOT EXISTS `detallecompra` (
   PRIMARY KEY (`id`),
   KEY `comprobanteId` (`comprobanteId`),
   KEY `itemId` (`itemId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `detallecompra`
+--
+
+INSERT INTO `detallecompra` (`id`, `comprobanteId`, `itemId`, `cantidad`, `total`) VALUES
+(1, 32, 111, 2, 0),
+(2, 32, 987, 10, 0);
 
 -- --------------------------------------------------------
 

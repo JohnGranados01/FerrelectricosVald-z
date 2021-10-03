@@ -17,20 +17,60 @@
       }
     }
     
-    if(isset($_POST['addComprobante_btn'])){
-      $message='';
-      $sql = "INSERT INTO comprobante (fecha, clienteNombre) VALUES (:fecha, :clienteNombre)";
-      $stmt = $conn->prepare($sql);
-      $stmt->bindParam(':fecha', $_POST['fecha']);
-      $stmt->bindParam(':clienteNombre', $_POST['clienteNombre']);
-      if ($stmt->execute()) {
-        $message = 'Comprobante Creado Satisfactoriamente!';
-      } else {
-        $message = 'Lamentablemente no se pudo crear el Comprobante!';
-      }
+    function getClientes(){
+      require '../database.php';
+      $consulta = $conn->query("SELECT identificacion, nombre FROM cliente");
+      return $consulta;
+    }
+    function getComprobantes(){
+      require '../database.php';
+      $consulta = $conn->query("SELECT MAX(id) AS id FROM comprobante");
+      return $consulta;
+    }
+    function getItems(){
+      require '../database.php';
+      $consulta = $conn->query("SELECT id, nombre FROM item");
+      return $consulta;
     }
 
-                
+
+      if(isset($_POST['addComprobante_btn'])){
+        require '../database.php';
+        $dia = 86400;
+        $message='';
+        $fecha = strtotime($_REQUEST['fecha']);
+        $id = $_POST['idCliente'];
+          for($i=0; $i<=$fecha; $i=$i+$dia){
+            $fechaUno = date("Y-m-d");
+            $sql = "INSERT INTO comprobante (fecha, idCliente) VALUES (:fecha, '$id')";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':fecha', $fechaUno);
+            if ($stmt->execute()) {
+              $message = 'Comprobante Creado Satisfactoriamente!';
+            } else {
+              $message = 'Lamentablemente no se pudo crear el Comprobante!';
+            }
+    
+          }
+          
+        }
+         if(isset($_POST['adddetalleComprobante_btn'])){
+          require '../database.php';
+          $msj='';
+          $comprobanteId = $_POST['idComprobante'];
+          $itemId = $_POST['idItem'];
+          $cantidad = $_POST['cantidadItem'];
+          // Falta hacer el calculo del total de cantidad por precio y a suma total de la factura
+          $sql = "INSERT INTO detallecompra (comprobanteId, itemId, cantidad, total) VALUES ('$comprobanteId', '$itemId', '$cantidad', 0)";
+          $stmt = $conn->prepare($sql);
+          if ($stmt->execute()) {
+            $msj = 'Detalle de compra Creado Satisfactoriamente ';
+          } else {
+            $msj = 'Lamentablemente no se pudo crear el detalle de esa compra!';
+          }
+
+        } 
+        
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -90,17 +130,20 @@
           <form class="row g-3 needs-validation" action="registrar_Factura.php" method="POST" novalidate>
           <div class="row g-3">
             <div class="col-md-4 position-absulute">
-              <label for="clienteNombre" class="form-label">Cliente:</label>
-              <select class="form-select" name="clienteNombre" required>
+              <label for="idCliente" class="form-label">Cliente:</label>
+              <select name="idCliente" class="form-select" id="idCliente"required>
                 <option value="">OBLIGATORIO</option>
                 <?php
                   require '../database.php';
-                  $consulta = $conn->query("SELECT nombre FROM cliente");
-                  foreach($consulta as $resultado){
-                    echo '<option value="'.$resultado['nombre'].'">'.$resultado['nombre'].'</option>';
+                  $array = getClientes();
+                  if(sizeof($array)>0){
+                    foreach($array as $resultado){
+                      echo '<option value="'.$resultado['identificacion'].'">'.$resultado['nombre'].'</option>';
+                    }
                   }
                 ?>
               </select>
+              <!-- <input type="number" class="form-control" name="idCliente" id="idCliente" aria-describedby="validationTooltipUsernamePrepend" required> -->
               <div class="valid-feedback">
                 Campos validos.
               </div>
@@ -121,7 +164,6 @@
               </div>
             </div>
           </div> 
-          <br>
         <div class="row">
           <div class="col-sm">
             <button class="btn btn-warning" type="submit" name="addComprobante_btn">Registrar</button>
@@ -132,12 +174,80 @@
         </div>
         </form>
         <br>
-    <?php if(!empty($message)): ?>
-      <div class="alert alert-warning" role="alert">
-      <?= $message ?>
-      </div>
-      <?php endif; ?>
-    <br>
+        <?php if(!empty($message)): ?>
+          <div class="alert alert-warning" role="alert">
+          <?= $message ?>
+          </div>
+          <?php endif; ?>
+        <br>
+        <form class="row g-3 needs-validation" action="registrar_Factura.php" method="POST" novalidate>
+        <div class="row g-3">
+            <div class="col-md-4 position-absulute">
+              <label for="idComprobante" class="form-label">Comprobante:</label>
+              <select name="idComprobante" class="form-select" id="idComprobante"required>
+                <option value="">OBLIGATORIO</option>
+                <?php
+                  require '../database.php';
+                  $array = getComprobantes();
+                  foreach($array as $res){
+                    echo '<option value="'.$res['id'].'">'.$res['id'].'</option>';
+                  }
+                ?>
+              </select>
+              <div class="valid-feedback">
+                Campos validos.
+              </div>
+              <div class="invalid-feedback">
+                Campo Requerido.
+              </div>
+            </div>
+            <div class="col-md-4 position-absulute">
+              <label for="idItem" class="form-label">Item:</label>
+              <select name="idItem" class="form-select" id="idItem"required>
+                <option value="">OBLIGATORIO</option>
+                <?php
+                  require '../database.php';
+                  $array = getItems();
+                  foreach($array as $res){
+                    echo '<option value="'.$res['id'].'">'.$res['nombre'].'</option>';
+                  }
+                ?>
+              </select>
+              <div class="valid-feedback">
+                Campos validos.
+              </div>
+              <div class="invalid-feedback">
+                Campo Requerido.
+              </div>
+            </div>
+            <div class="col-md-4 position-absulute">
+              <label for="cantidadItem" class="form-label">Cantidad:</label>
+              <input type="number" name="cantidadItem" class="form-control" required>
+              <div class="valid-feedback">
+                Campos validos.
+              </div>
+              <div class="invalid-feedback">
+                Campo Requerido.
+              </div>
+            </div>
+          </div> 
+          <div class="row">
+          <div class="col-sm">
+            <button class="btn btn-warning" type="submit" name="adddetalleComprobante_btn">Registrar</button>
+          </div>
+          <div class="col-sm">
+            <button class="btn btn-warning" type="reset">Borrar</button>
+          </div>
+        </div>
+        </form>
+        <br>
+        <?php if(!empty($msj)): ?>
+          <div class="alert alert-warning" role="alert">
+          <?= $msj ?>
+          </div>
+          <?php endif; ?>
+        <br>
+        
         <div class="form-group col-sm">
           <br>
           <p id="table">
