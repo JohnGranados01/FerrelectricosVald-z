@@ -241,7 +241,7 @@
                 echo "<tr>";
           }
         }else if(!empty($nombre)){
-          $consulta = $conn->query("SELECT * FROM cliente WHERE nombre = '$nombre'");
+          $consulta = $conn->query("SELECT * FROM cliente WHERE nombre LIKE '%$nombre%'");
           foreach($consulta as $result){
             echo "<tr>
             <td>".$result['identificacion']."</td>";
