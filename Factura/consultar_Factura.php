@@ -17,6 +17,12 @@
       }
   }
 
+  function getComprobantes(){
+    require '../database.php';
+    $consulta = $conn->query("SELECT id AS id FROM comprobante");
+    return $consulta;
+  }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,8 +83,9 @@
   <div class="container">
     <br>
     <h5 style="text-align: center;">Ingrese los datos para consultar factura</h5>
-    <!-- <form class="needs-validation" novalidate> -->
-      <form action ="" method="get">
+    <br>
+    <hr>
+      <form action ="" method="get" class="row g-3 needs-validation" novalidate>
       <div class="row">
         <div class="col-md-4 position-absulute">
           <label for="criterioBusqueda" class="form-label">Seleccione el criterio de busqueda:</label>
@@ -95,28 +102,32 @@
         </div>
         <div class="col-md-4 position-absulute">
           <label for="id" class="form-label">Digite el identificador:</label>
-          <input type="number" class="form-control" id="busqueda" name="busqueda" required>
+          <select name="id" class="form-select" id="id"required>
+                <option value="">OBLIGATORIO</option>
+                <?php
+                  require '../database.php';
+                  $array = getComprobantes();
+                  foreach($array as $res){
+                    echo '<option value="'.$res['id'].'">'.$res['id'].'</option>';
+                  }
+                ?>
+              </select>
           <div class="valid-feedback">
             Datos Correctos!.
           </div>
           <div class="invalid-feedback">
             Datos Incorrectos!.
           </div>
-        
         </div>
-      
-        
-      </div>
-        
+      </div>  
       <br>
       <div class="row">
         <div class="col-sm">
-          <!--<button class="btn btn-warning" type="button" onclick="showFacturaId()">Consultar</button>
--->
-          <input type="submit" name="enviar" value="consultar">
+          <input class="btn btn-warning" type="submit" name="enviar" value="consultar">
         </div>
       </div>
-
+    <br>
+    <br>
       <table class="table">
         <thead class="table-secondary">
           <tr>
@@ -130,11 +141,13 @@
 
       <?php
       if(isset($_GET['enviar'])){
-        $connect = mysqli_connect('localhost', 'root', '', 'ferrelectricosvaldez');
-        $busqueda = $_GET['busqueda'];
-        $sql = "SELECT *, nombre FROM comprobante, cliente WHERE id=$busqueda AND comprobante.idCliente = cliente.identificacion";
-        $result = mysqli_query($connect, $sql);
-        while($mostrar=mysqli_fetch_array($result)){
+        require '../database.php';
+        $id = $_GET['id'];
+        $result= $conn->query("SELECT *, nombre FROM comprobante, cliente WHERE id=$id AND comprobante.idCliente = cliente.identificacion");
+        
+        if(!empty($result)){
+          foreach($result as $mostrar){ 
+
       ?>
         <tr>
             <td><?php echo $mostrar['id'] ?></td>
@@ -144,7 +157,9 @@
           </tr>
           <?php
             }
+          }
           ?>
+
         <thead class="table-secondary">
           <tr>
             <th scope="col">Id del producto</th>
@@ -156,11 +171,10 @@
           </tr>
         </thead>
         <?php
-          $sql2 = "SELECT *, cantidad, item.precio*detallecompra.cantidad as total FROM item, detallecompra, comprobante, cliente 
-                    WHERE detallecompra.comprobanteId=$busqueda AND item.Id=detallecompra.itemId 
-                    AND detallecompra.comprobanteId=comprobante.id AND comprobante.idCliente = cliente.identificacion";
-          $result = mysqli_query($connect, $sql2);
-          while($mostrar=mysqli_fetch_array($result)){
+          $result2= $conn->query("SELECT *, cantidad, item.precio*detallecompra.cantidad as total FROM item, detallecompra, comprobante, cliente 
+          WHERE detallecompra.comprobanteId=$id AND item.Id=detallecompra.itemId 
+          AND detallecompra.comprobanteId=comprobante.id AND comprobante.idCliente = cliente.identificacion");
+            foreach($result2 as $mostrar){
         ?>
           <tr>
               <td><?php echo $mostrar['Id'] ?></td>
@@ -181,11 +195,10 @@
           </tr>
         </thead>
         <?php
-          $sql3 = "SELECT SUM(item.precio*detallecompra.cantidad) as Total FROM item, detallecompra, comprobante, cliente
-          WHERE detallecompra.comprobanteId=$busqueda AND item.Id=detallecompra.itemId 
-                    AND detallecompra.comprobanteId=comprobante.id AND comprobante.idCliente = cliente.identificacion";
-          $result = mysqli_query($connect, $sql3);
-          while($mostrar=mysqli_fetch_array($result)){
+          $result3= $conn->query("SELECT SUM(item.precio*detallecompra.cantidad) as Total FROM item, detallecompra, comprobante, cliente
+          WHERE detallecompra.comprobanteId=$id AND item.Id=detallecompra.itemId 
+                    AND detallecompra.comprobanteId=comprobante.id AND comprobante.idCliente = cliente.identificacion");
+            foreach($result3 as $mostrar){
         ?>
           <tr>
               <td><?php echo $mostrar['Total'] ?></td>
