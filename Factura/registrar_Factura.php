@@ -42,7 +42,7 @@
         $id = $_POST['idCliente'];
           for($i=0; $i<=$fecha; $i=$i+$dia){
             $fechaUno = date("Y-m-d");
-            $sql = "INSERT INTO comprobante (fecha, idCliente) VALUES (:fecha, '$id')";
+            $sql = "INSERT INTO comprobante (fecha, idCliente, total) VALUES (:fecha, '$id')";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':fecha', $fechaUno);
             if ($stmt->execute()) {
@@ -60,7 +60,7 @@
           $comprobanteId = $_POST['idComprobante'];
           $itemId = $_POST['idItem'];
           $cantidad = $_POST['cantidadItem'];
-          $sql = "INSERT INTO detallecompra (comprobanteId, itemId, cantidad) VALUES ('$comprobanteId', '$itemId', '$cantidad')";
+          $sql = "INSERT INTO detallecompra (comprobanteId, itemId, cantidad, total) VALUES ('$comprobanteId', '$itemId', '$cantidad', 0)";
           $stmt = $conn->prepare($sql);
           if ($stmt->execute()) {
             $msj = 'Detalle de compra Creado Satisfactoriamente ';
@@ -278,6 +278,7 @@
                 echo "<td>". $result['Total']."</td>";
                 
                 echo "<tr>";
+                $conn->query("UPDATE detallecompra, item, comprobante SET detallecompra.total = detallecompra.cantidad*item.precio WHERE detallecompra.itemId = item.Id AND detallecompra.comprobanteId =$comprobanteId");
             }
               $suma = $conn->query("SELECT SUM(detallecompra.cantidad*item.precio) AS Suma FROM detallecompra, item 
               WHERE detallecompra.comprobanteId = '$comprobanteId' AND detallecompra.itemId = item.Id");
