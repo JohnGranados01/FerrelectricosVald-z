@@ -29,7 +29,7 @@
     }
     function getItems(){
       require '../database.php';
-      $consulta = $conn->query("SELECT id, nombre FROM item");
+      $consulta = $conn->query("SELECT Id, denominacion FROM item");
       return $consulta;
     }
 
@@ -60,8 +60,7 @@
           $comprobanteId = $_POST['idComprobante'];
           $itemId = $_POST['idItem'];
           $cantidad = $_POST['cantidadItem'];
-          // Falta hacer el calculo del total de cantidad por precio y a suma total de la factura
-          $sql = "INSERT INTO detallecompra (comprobanteId, itemId, cantidad, total) VALUES ('$comprobanteId', '$itemId', '$cantidad', 0)";
+          $sql = "INSERT INTO detallecompra (comprobanteId, itemId, cantidad) VALUES ('$comprobanteId', '$itemId', '$cantidad')";
           $stmt = $conn->prepare($sql);
           if ($stmt->execute()) {
             $msj = 'Detalle de compra Creado Satisfactoriamente ';
@@ -126,7 +125,6 @@
     <div class="container">
         <br>
         <h5 style="text-align: center;">Ingrese los datos para registrar factura</h5>
-        <!-- <form class="needs-validation" novalidate> -->
           <form class="row g-3 needs-validation" action="registrar_Factura.php" method="POST" novalidate>
           <div class="row g-3">
             <div class="col-md-4 position-absulute">
@@ -143,7 +141,6 @@
                   }
                 ?>
               </select>
-              <!-- <input type="number" class="form-control" name="idCliente" id="idCliente" aria-describedby="validationTooltipUsernamePrepend" required> -->
               <div class="valid-feedback">
                 Campos validos.
               </div>
@@ -209,7 +206,7 @@
                   require '../database.php';
                   $array = getItems();
                   foreach($array as $res){
-                    echo '<option value="'.$res['id'].'">'.$res['nombre'].'</option>';
+                    echo '<option value="'.$res['Id'].'">'.$res['denominacion'].'</option>';
                   }
                 ?>
               </select>
@@ -255,49 +252,45 @@
           </p>
         </div>
         <br>
-        <table class="table">
-          <thead class="table-secondary">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry the Bird</td>
-              <td>@twitter</td>
-              <td>hola cristina</td>
-            </tr>
-            <tr>
-              <th scope="row"></th>
-              <td colspan="2" style="text-align: center;">SubTotal:</td>
-              <td>AQUI EL SUBTOTAL DINAMICO</td>
-            </tr>
-            <tr>
-              <th scope="row"></th>
-              <td colspan="2" style="text-align: center;">Iva:</td>
-              <td>AQUI EL IVA DINAMICO</td>
-            </tr>
-            <tr>
-              <th scope="row"></th>
-              <td colspan="2" style="text-align: center;">Valor neto a pagar:</td>
-              <td>AQUI EL VALOR NETO A PAGAR</td>
-            </tr>
+        <table class="table caption-top">
+      <thead class="table-secondary">
+        <tr>
+          <th scope="col"> Id Comprobante </th>
+          <th scope="col"> Item </th>
+          <th scope="col"> Cantidad </th>
+          <th scope="col"> Precio </th>
+          <th scope="col"> Total</th>
+          </tr>
+      </thead>
+      <tbody>
+      <?php 
+        require '../database.php';
+        $comprobanteId = ( empty($_POST['idComprobante']) ) ? NULL : $_POST['idComprobante'];
+        if(!empty($comprobanteId)){
+          $consulta = $conn->query("SELECT detallecompra.comprobanteId, item.denominacion, detallecompra.cantidad, item.precio, detallecompra.cantidad*item.precio FROM detallecompra, item 
+          WHERE detallecompra.comprobanteId = '$comprobanteId' AND detallecompra.itemId = item.Id");
+          foreach($consulta as $result){
+            echo "<tr>
+            <td>".$result['comprobanteId']."</td>";
+                echo "<td>". $result['nombre']."</td>";
+                echo "<td>". $result['cantidad']."</td>";
+                echo "<td>". $result['precio']."</td>";
+                echo "<td>". $result['detallecompra.cantidad*item.precio']."</td>";
+                
+                echo "<tr>";
+            }
+              $suma = $conn->query("SELECT SUM(detallecompra.cantidad*item.precio) AS Suma FROM detallecompra, item 
+              WHERE detallecompra.comprobanteId = '$comprobanteId' AND detallecompra.itemId = item.Id");
+              foreach($suma as $var){
+                echo "<tr class='table-secondary'>
+                <td colspan= '4' style='text-align:center'>"."Suma"."</td>";
+                echo "<td>".$var['Suma']."</td>";
+                echo "</tr>";
+            }
+            
+          
+          }
+          ?>
           </tbody>
         </table>
     </div>
