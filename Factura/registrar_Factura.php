@@ -85,9 +85,9 @@
   <?php if(!empty($user)):?>
   <nav class="navbar navbar-light" style="background-color: #C2824F;">
     <div class="container-fluid">
-      <a class="navbar-brand" href="consultar_Factura.html">Consultar Factura</a>
-      <a class="navbar-brand" href="eliminar_Factura.html">Eliminar Factura</a>
-      <a class="navbar-brand" href="ver_Factura.html">Ver Factura</a>
+      <a class="navbar-brand" href="consultar_Factura.php">Consultar Factura</a>
+      <a class="navbar-brand" href="eliminar_Factura.php">Eliminar Factura</a>
+      <a class="navbar-brand" href="ver_Factura.php">Ver Factura</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -267,15 +267,15 @@
         require '../database.php';
         $comprobanteId = ( empty($_POST['idComprobante']) ) ? NULL : $_POST['idComprobante'];
         if(!empty($comprobanteId)){
-          $consulta = $conn->query("SELECT detallecompra.comprobanteId, item.denominacion, detallecompra.cantidad, item.precio, detallecompra.cantidad*item.precio FROM detallecompra, item 
+          $consulta = $conn->query("SELECT detallecompra.comprobanteId, item.denominacion, detallecompra.cantidad, item.precio, detallecompra.cantidad*item.precio AS Total FROM detallecompra, item 
           WHERE detallecompra.comprobanteId = '$comprobanteId' AND detallecompra.itemId = item.Id");
           foreach($consulta as $result){
             echo "<tr>
             <td>".$result['comprobanteId']."</td>";
-                echo "<td>". $result['nombre']."</td>";
+                echo "<td>". $result['denominacion']."</td>";
                 echo "<td>". $result['cantidad']."</td>";
                 echo "<td>". $result['precio']."</td>";
-                echo "<td>". $result['detallecompra.cantidad*item.precio']."</td>";
+                echo "<td>". $result['Total']."</td>";
                 
                 echo "<tr>";
             }
