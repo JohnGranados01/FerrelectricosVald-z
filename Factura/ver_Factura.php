@@ -31,9 +31,9 @@
 <body>
   <nav class="navbar navbar-light" style="background-color: #C2824F;">
     <div class="container-fluid">
-      <a class="navbar-brand" href="registrar_Factura.html">Registrar Factura</a>
-      <a class="navbar-brand" href="eliminar_Factura.html">Eliminar Factura</a>
-      <a class="navbar-brand" href="consultar_Factura.html">Consultar Factura</a>
+      <a class="navbar-brand" href="registrar_Factura.php">Registrar Factura</a>
+      <a class="navbar-brand" href="eliminar_Factura.php">Eliminar Factura</a>
+      <a class="navbar-brand" href="consultar_Factura.php">Consultar Factura</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -88,12 +88,9 @@
         </thead>
         <tbody>
           <?php
-            $connect = mysqli_connect('localhost', 'root', '', 'ferrelectricosvaldez');
-            $sql = "SELECT *, nombre from comprobante, cliente WHERE comprobante.idCliente = cliente.identificacion ORDER BY comprobante.id DESC";
-
-            $result = mysqli_query($connect, $sql);
-
-            while($mostrar=mysqli_fetch_array($result)){
+            require '../database.php';
+            $array = $conn->query("SELECT *, nombre from comprobante, cliente WHERE comprobante.idCliente = cliente.identificacion ORDER BY comprobante.id DESC");
+            foreach($array as $mostrar){
           ?>
           <tr>
             <td><?php echo $mostrar['id'] ?></td>
