@@ -90,7 +90,7 @@
           <?php
             $connect = mysqli_connect('localhost', 'root', '', 'ferrelectricosvaldez');
             $sql = "SELECT *, nombre from comprobante, cliente WHERE comprobante.idCliente = cliente.identificacion ORDER BY comprobante.id DESC";
-            //$sql = "SELECT nombr from cliente";
+
             $result = mysqli_query($connect, $sql);
 
             while($mostrar=mysqli_fetch_array($result)){

@@ -16,6 +16,7 @@
           $user = $results;
       }
   }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,13 +78,12 @@
     <br>
     <h5 style="text-align: center;">Ingrese los datos para consultar factura</h5>
     <!-- <form class="needs-validation" novalidate> -->
-      <form action="">
+      <form action ="" method="get">
       <div class="row">
         <div class="col-md-4 position-absulute">
           <label for="criterioBusqueda" class="form-label">Seleccione el criterio de busqueda:</label>
           <select class="form-select" id="criterioBusqueda" required>
-            <option selected disabled value="">Escoja...</option>
-            <option value="0">Identificación Cliente</option>
+            <option selected disabled value="">Seleccione...</option>
             <option value="1">Identificación Factura</option>
           </select>
           <div class="valid-feedback">
@@ -94,8 +94,8 @@
           </div>
         </div>
         <div class="col-md-4 position-absulute">
-          <label for="id" class="form-label">Diguite el el criterio de busqueda:</label>
-          <input type="number" class="form-control" id="id" required>
+          <label for="id" class="form-label">Digite el identificador:</label>
+          <input type="number" class="form-control" id="busqueda" name="busqueda" required>
           <div class="valid-feedback">
             Datos Correctos!.
           </div>
@@ -111,92 +111,100 @@
       <br>
       <div class="row">
         <div class="col-sm">
-          <button class="btn btn-warning" type="button" onclick="showFacturaId()">Consultar</button>
+          <!--<button class="btn btn-warning" type="button" onclick="showFacturaId()">Consultar</button>
+-->
+          <input type="submit" name="enviar" value="consultar">
         </div>
       </div>
-      
+
+      <table class="table">
+        <thead class="table-secondary">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Id cliente</th>
+            <th scope="col">Nombre cliente </th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <?php
+      if(isset($_GET['enviar'])){
+        $connect = mysqli_connect('localhost', 'root', '', 'ferrelectricosvaldez');
+        $busqueda = $_GET['busqueda'];
+        $sql = "SELECT *, nombre FROM comprobante, cliente WHERE id=$busqueda AND comprobante.idCliente = cliente.identificacion";
+        $result = mysqli_query($connect, $sql);
+        while($mostrar=mysqli_fetch_array($result)){
+      ?>
+        <tr>
+            <td><?php echo $mostrar['id'] ?></td>
+            <td><?php echo $mostrar['fecha'] ?></td>
+            <td><?php echo $mostrar['idCliente'] ?></td>
+            <td><?php echo $mostrar['nombre'] ?></td>
+          </tr>
+          <?php
+            }
+          ?>
+        <thead class="table-secondary">
+          <tr>
+            <th scope="col">Id del producto</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <?php
+          $sql2 = "SELECT *, cantidad, item.precio*detallecompra.cantidad as total FROM item, detallecompra, comprobante, cliente 
+                    WHERE detallecompra.comprobanteId=$busqueda AND item.Id=detallecompra.itemId 
+                    AND detallecompra.comprobanteId=comprobante.id AND comprobante.idCliente = cliente.identificacion";
+          $result = mysqli_query($connect, $sql2);
+          while($mostrar=mysqli_fetch_array($result)){
+        ?>
+          <tr>
+              <td><?php echo $mostrar['Id'] ?></td>
+              <td><?php echo $mostrar['denominacion'] ?></td>
+              <td><?php echo $mostrar['descripcion'] ?></td>
+              <td><?php echo $mostrar['precio'] ?></td>
+              <td><?php echo $mostrar['cantidad'] ?></td>
+              <td><?php echo $mostrar['total'] ?></td>
+            </tr>
+            <?php
+              }
+            
+            ?>
+
+          <thead class="table-secondary">
+          <tr>
+            <th scope="col">Total de la compra</th>
+          </tr>
+        </thead>
+        <?php
+          $sql3 = "SELECT SUM(item.precio*detallecompra.cantidad) as Total FROM item, detallecompra, comprobante, cliente
+          WHERE detallecompra.comprobanteId=$busqueda AND item.Id=detallecompra.itemId 
+                    AND detallecompra.comprobanteId=comprobante.id AND comprobante.idCliente = cliente.identificacion";
+          $result = mysqli_query($connect, $sql3);
+          while($mostrar=mysqli_fetch_array($result)){
+        ?>
+          <tr>
+              <td><?php echo $mostrar['Total'] ?></td>
+
+            </tr>
+            <?php
+              }
+            }
+            ?>
+
+        </tbody>
+      </table>
     </form>
+
     <br>
     <p id="table">
 
     </p>
     <br>
-    <!-- <div class="row">
-      <div class="col-md-6">
-        <label for="nombreCliente" class="form-label">Nombre del cliente:</label>
-        <label id="nombreCliente">si o no</label>
-      </div>
-      <div class="col-md-6">
-        <label for="id" class="form-label">Identificación:</label>
-        <label id="id">si o no</label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <label for="fecha" class="form-label">Fecha:</label>
-        <label id="fecha">si o no</label>
-      </div>
-      <div class="col-md-6">
-        <label for="direccion" class="form-label">Dirección:</label>
-        <label id="direccion">si o no</label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <label for="telefono" class="form-label">Telefono:</label>
-        <label id="telefono">si o no</label>
-      </div>
-      <div class="col-md-6">
-        <label for="ciudad" class="form-label">Ciudad:</label>
-        <label id="ciudad" class="form-label">ioi</label>
-      </div>
-    </div>
-    <br>
-    <table class="table">
-      <thead class="table-secondary">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th scope="col">Handle</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry the Bird</td>
-          <td>@twitter</td>
-          <td>hola cristina</td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td colspan="2" style="text-align: center;">SubTotal:</td>
-          <td>AQUI EL SUBTOTAL DINAMICO</td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td colspan="2" style="text-align: center;">Iva:</td>
-          <td>AQUI EL IVA DINAMICO</td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td colspan="2" style="text-align: center;">Valor neto a pagar:</td>
-          <td>AQUI EL VALOR NETO A PAGAR</td>
-        </tr>
-      </tbody>
-    </table> -->
 </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script><!-- Clase de bootsrap Bundle-->
     <script src="../logica/factura.js"></script> <!-- Clase de logica para factura-->
