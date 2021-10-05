@@ -20,7 +20,7 @@
       require 'database.php';
       $message='';
       if(!empty($_POST['nombre']) && !empty($_POST['precio'])){
-        $sql = "INSERT INTO item (id, nombre, descripcion, precio) VALUES (:id, :nombre, :descripcion, :precio)";
+        $sql = "INSERT INTO item (id, denominacion, descripcion, precio) VALUES (:id, :nombre, :descripcion, :precio)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':id', $_POST['id']);
         $stmt->bindParam(':nombre', $_POST['nombre']);
@@ -188,11 +188,11 @@
           require 'database.php';
           $nombre= ( empty($_POST['nombre']) ) ? NULL : $_POST['nombre'];
           if(!empty($nombre)){
-            $consulta = $conn->query("SELECT * FROM item WHERE nombre LIKE '%$nombre%'");
+            $consulta = $conn->query("SELECT * FROM item WHERE denominacion LIKE '%$nombre%'");
             foreach($consulta as $result){
               echo "<tr>
               <td>".$result['Id']."</td>";
-                  echo "<td>". $result['nombre']."</td>";
+                  echo "<td>". $result['denominacion']."</td>";
                   echo "<td>". $result['descripcion']."</td>";
                   echo "<td>". $result['precio']."</td>";
                   echo "<tr>";
@@ -202,7 +202,7 @@
             foreach($consulta as $result){
               echo "<tr>
               <td>".$result['Id']."</td>";
-                  echo "<td>". $result['nombre']."</td>";
+                  echo "<td>". $result['denominacion']."</td>";
                   echo "<td>". $result['descripcion']."</td>";
                   echo "<td>". $result['precio']."</td>";
                   echo "<tr>"; 
