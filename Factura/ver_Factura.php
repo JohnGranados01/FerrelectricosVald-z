@@ -16,6 +16,7 @@
           $user = $results;
       }
   }
+ 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,35 +80,30 @@
       <table class="table">
         <thead class="table-secondary">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-            <th scope="col">Handle</th>
+            <th scope="col">ID</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Id cliente</th>
+            <th scope="col">Nombre cliente </th>
           </tr>
         </thead>
         <tbody>
+          <?php
+            $connect = mysqli_connect('localhost', 'root', '', 'ferrelectricosvaldez');
+            $sql = "SELECT *, nombre from comprobante, cliente WHERE comprobante.idCliente = cliente.identificacion ORDER BY comprobante.id DESC";
+            //$sql = "SELECT nombr from cliente";
+            $result = mysqli_query($connect, $sql);
+
+            while($mostrar=mysqli_fetch_array($result)){
+          ?>
           <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>@mdo</td>
+            <td><?php echo $mostrar['id'] ?></td>
+            <td><?php echo $mostrar['fecha'] ?></td>
+            <td><?php echo $mostrar['idCliente'] ?></td>
+            <td><?php echo $mostrar['nombre'] ?></td>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>hola cristina</td>
-            <td>hola cristina</td>
-            <td>hola cristina</td>
-            <td>hola cristina</td>
-          </tr>
+          <?php
+            }
+          ?>
         </tbody>
       </table>
     </div>
