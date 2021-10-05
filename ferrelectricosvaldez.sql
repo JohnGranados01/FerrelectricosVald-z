@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 05-10-2021 a las 18:36:07
--- Versión del servidor: 5.7.31
--- Versión de PHP: 7.3.21
+-- Servidor: 127.0.0.1:3308
+-- Tiempo de generación: 05-10-2021 a las 20:48:32
+-- Versión del servidor: 5.7.28
+-- Versión de PHP: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -59,36 +60,36 @@ CREATE TABLE IF NOT EXISTS `comprobante` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `fecha` date NOT NULL,
   `idCliente` int(10) NOT NULL,
-  `Total` int(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idCliente` (`idCliente`)
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `comprobante`
 --
 
-INSERT INTO `comprobante` (`id`, `fecha`, `idCliente`, `Total`) VALUES
-(1, '2021-09-01', 1057610935, 0),
-(3, '2021-10-01', 1057610935, 0),
-(5, '2021-10-01', 2, 0),
-(6, '2021-10-01', 2, 0),
-(16, '2021-10-02', 1057610935, 0),
-(18, '2021-10-02', 1, 0),
-(19, '2021-10-02', 1, 0),
-(21, '2021-10-02', 9873, 0),
-(22, '2021-10-02', 9873, 0),
-(23, '2021-10-02', 1, 0),
-(24, '2021-10-02', 1057610935, 0),
-(25, '2021-10-02', 1057610935, 0),
-(26, '2021-10-03', 1057610935, 0),
-(27, '2021-10-03', 1057610935, 0),
-(28, '2021-10-03', 1057610935, 0),
-(29, '2021-10-03', 1057610935, 0),
-(30, '2021-10-03', 1, 0),
-(31, '2021-10-03', 9873, 0),
-(32, '2021-10-03', 1057610935, 0),
-(33, '2021-10-05', 1, 0);
+INSERT INTO `comprobante` (`id`, `fecha`, `idCliente`) VALUES
+(1, '2021-09-01', 1057610935),
+(3, '2021-10-01', 1057610935),
+(5, '2021-10-01', 2),
+(6, '2021-10-01', 2),
+(16, '2021-10-02', 1057610935),
+(18, '2021-10-02', 1),
+(19, '2021-10-02', 1),
+(21, '2021-10-02', 9873),
+(22, '2021-10-02', 9873),
+(23, '2021-10-02', 1),
+(24, '2021-10-02', 1057610935),
+(25, '2021-10-02', 1057610935),
+(26, '2021-10-03', 1057610935),
+(27, '2021-10-03', 1057610935),
+(28, '2021-10-03', 1057610935),
+(29, '2021-10-03', 1057610935),
+(30, '2021-10-03', 1),
+(31, '2021-10-03', 9873),
+(32, '2021-10-03', 1057610935),
+(33, '2021-10-05', 1),
+(38, '2021-10-05', 1057610935);
 
 -- --------------------------------------------------------
 
@@ -106,17 +107,21 @@ CREATE TABLE IF NOT EXISTS `detallecompra` (
   PRIMARY KEY (`id`),
   KEY `comprobanteId` (`comprobanteId`),
   KEY `itemId` (`itemId`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `detallecompra`
 --
 
 INSERT INTO `detallecompra` (`id`, `comprobanteId`, `itemId`, `cantidad`, `total`) VALUES
-(1, 32, 111, 2, 0),
-(2, 32, 987, 10, 0),
-(6, 34, 111, 4, 0),
-(5, 34, 123, 4, 0);
+(1, 32, 111, 2, 50),
+(2, 32, 987, 10, 50),
+(6, 34, 111, 4, 30),
+(5, 34, 123, 4, 30),
+(11, 38, 123, 2, 600),
+(12, 38, 123, 2, 600),
+(13, 38, 1, 3, 15000),
+(14, 38, 1, 3, 15000);
 
 -- --------------------------------------------------------
 
@@ -144,7 +149,8 @@ INSERT INTO `item` (`Id`, `denominacion`, `descripcion`, `precio`) VALUES
 (987, 'silicona', '2', 2),
 (33, 'pegante', 'boxer', 2500),
 (111, 'jabon', '', 1500),
-(98765, 'boxer para delincuentes', 'malo para la salud', 2000);
+(98765, 'boxer para delincuentes', 'malo para la salud', 2000),
+(1, 'puntilla bareta N5', 'Kilo', 5000);
 
 -- --------------------------------------------------------
 
