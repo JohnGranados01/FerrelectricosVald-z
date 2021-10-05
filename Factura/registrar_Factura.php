@@ -124,7 +124,8 @@
   </nav>
     <div class="container">
         <br>
-        <h5 style="text-align: center;">Ingrese los datos para registrar factura</h5>
+        <h5 style="text-align: center;">Ingrese los datos para registrar Comprobante</h5>
+        <hr>
           <form class="row g-3 needs-validation" action="registrar_Factura.php" method="POST" novalidate>
           <div class="row g-3">
             <div class="col-md-4 position-absulute">
@@ -177,6 +178,8 @@
           </div>
           <?php endif; ?>
         <br>
+        <h5 style="text-align: center;">Ingrese los datos para registrar Detalle de la Compra</h5>
+        <hr>
         <form class="row g-3 needs-validation" action="registrar_Factura.php" method="POST" novalidate>
         <div class="row g-3">
             <div class="col-md-4 position-absulute">
