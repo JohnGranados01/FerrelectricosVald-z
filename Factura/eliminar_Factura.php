@@ -16,6 +16,11 @@
           $user = $results;
       }
   }
+  function getComprobantes(){
+    require '../database.php';
+    $consulta = $conn->query("SELECT id AS id FROM comprobante");
+    return $consulta;
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,9 +35,9 @@
 <body>
   <nav class="navbar navbar-light" style="background-color: #C2824F;">
     <div class="container-fluid">
-      <a class="navbar-brand" href="registrar_Factura.html">Registrar Factura</a>
-      <a class="navbar-brand" href="consultar_Factura.html">Consultar Factura</a>
-      <a class="navbar-brand" href="ver_Factura.html">Ver Factura</a>
+      <a class="navbar-brand" href="registrar_Factura.php">Registrar Factura</a>
+      <a class="navbar-brand" href="consultar_Factura.php">Consultar Factura</a>
+      <a class="navbar-brand" href="ver_Factura.php">Ver Factura</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -74,15 +79,17 @@
   </nav>
   <div class="container">
     <br>
+    <br>
     <h5 style="text-align: center;">Ingrese los datos para eliminar factura</h5>
+    <br>
+    <br>
     <form class="needs-validation" novalidate>
       <div class="row">
         <div class="col-md-4 position-absulute">
           <label for="criterioBusqueda" class="form-label">Seleccione el criterio de busqueda:</label>
           <select class="form-select" id="criterioBusqueda" required>
-            <option selected disabled value="">Escoja...</option>
-            <option>...</option>
-            <option>...</option>
+            <option selected disabled value="">Seleccione...</option>
+            <option>Por id de factura</option>
           </select>
           <div class="valid-feedback">
             Looks good!
@@ -92,8 +99,17 @@
           </div>
         </div>
         <div class="col-md-4 position-absulute">
-          <label for="idFactura" class="form-label">Diguite el número de la factura:</label>
-          <input type="number" class="form-control" id="idFactura" required>
+          <label for="idFactura" class="form-label">Seleccione el número de la factura:</label>
+          <select name="id" class="form-select" id="id" required>
+                <option value="">OBLIGATORIO</option>
+                <?php
+                  require '../database.php';
+                  $array = getComprobantes();
+                  foreach($array as $res){
+                    echo '<option value="'.$res['id'].'">'.$res['id'].'</option>';
+                  }
+                ?>
+              </select>
           <div class="valid-feedback">
             Looks good!
           </div>
@@ -103,14 +119,33 @@
         
         </div>
       
-        <div class="col-sm position-absulute">
-          <button class="btn btn-warning" type="submit">Eliminar</button>
+        <div class="row">
+        <div class="col-sm">
+          <br>
+          <input class="btn btn-warning" type="submit" name="eliminar" value="Eliminar">
         </div>
+      </div>
       </div>
         
       <br>
       
+      <?php
+      if(isset($_GET['eliminar'])){
+
+        require '../database.php';
+        $id = $_GET['id'];
+        $result= $conn->query("DELETE FROM comprobante WHERE id=$id");
+        $result= $conn->query("DELETE FROM detallecompra WHERE comprobanteId=$id");
+        
+        if(!empty($result)){
+          echo '<script language="javascript">alert("El comprobante de pago con id '.$id.' se eliminó con éxito");</script>';
+        }else{
+        }
+      }
+      ?>
+
     </form>
+    <br>
   </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script><!-- Clase de bootsrap Bundle-->
     <script src="../logica/factura.js"></script> <!-- Clase de logica para factura-->
