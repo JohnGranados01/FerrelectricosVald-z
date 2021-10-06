@@ -15,12 +15,13 @@
             $user = $results;
         }
     }
-
+    //Codigo que permite insertar un item en la BD
     if(isset($_POST['addItem_btn'])){
       require 'database.php';
       $message='';
       if(!empty($_POST['nombre']) && !empty($_POST['precio'])){
-        $sql = "INSERT INTO item (id, denominacion, descripcion, precio) VALUES (:id, :nombre, :descripcion, :precio)";
+        $sql = "INSERT INTO item (id, denominacion, descripcion, precio) 
+        VALUES (:id, :nombre, :descripcion, :precio)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':id', $_POST['id']);
         $stmt->bindParam(':nombre', $_POST['nombre']);
@@ -185,6 +186,7 @@
       </thead>
       <tbody>
         <?php
+        //Consulta que devuelve el Item por nombre y por algun caracter de coincidencia en el nombre
           require 'database.php';
           $nombre= ( empty($_POST['nombre']) ) ? NULL : $_POST['nombre'];
           if(!empty($nombre)){
@@ -198,6 +200,7 @@
                   echo "<tr>";
             }
           }else{
+            //Consulta que devuelve el Item
             $consulta = $conn->query("SELECT * FROM item");
             foreach($consulta as $result){
               echo "<tr>

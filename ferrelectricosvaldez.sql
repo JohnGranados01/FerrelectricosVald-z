@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3308
--- Tiempo de generación: 05-10-2021 a las 20:48:32
+-- Tiempo de generación: 06-10-2021 a las 21:05:31
 -- Versión del servidor: 5.7.28
 -- Versión de PHP: 7.3.12
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `apellidos` varchar(90) COLLATE utf8_unicode_ci NOT NULL,
   `direccion` varchar(90) COLLATE utf8_unicode_ci NOT NULL,
   `correo` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `telefono` int(11) NOT NULL,
+  `telefono` int(13) NOT NULL,
   PRIMARY KEY (`identificacion`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -44,10 +44,10 @@ CREATE TABLE IF NOT EXISTS `cliente` (
 --
 
 INSERT INTO `cliente` (`identificacion`, `nombre`, `apellidos`, `direccion`, `correo`, `telefono`) VALUES
-(23582089, 'quien pregunta', 'Granados Salamanca', 'cll 11 B # 17-13', 'jhon.granados@uptc.edu.co', 333),
+(23581636, 'angelica', 'Salamanca', 'cll 15 9-56', 'angelica@gmail.com', 31212),
 (1057610935, 'john', 'Granados Salamanca', 'cll 11 B # 17-13', 'jhon.granados@uptc.edu.co', 333),
-(1, 'lina', 'Granados Salamanca', 'cll 11 B # 17-13', 'jhongranadossalamanca@gmail.com', 333),
-(9873, 'milton', 'granaods', 'uyr', 'jh@f.com', 321456);
+(1558966, 'lina', 'Granados Salamanca', 'cll 11 B # 17-13', 'linalorena@gmail.com', 316846780),
+(4277669, 'milton', 'granados Ochoa', 'crr 9 5 sur', 'miltonMago@gmail.com', 311238065);
 
 -- --------------------------------------------------------
 
@@ -62,31 +62,16 @@ CREATE TABLE IF NOT EXISTS `comprobante` (
   `idCliente` int(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idCliente` (`idCliente`)
-) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `comprobante`
 --
 
 INSERT INTO `comprobante` (`id`, `fecha`, `idCliente`) VALUES
-(1, '2021-09-01', 1057610935),
-(3, '2021-10-01', 1057610935),
-(5, '2021-10-01', 2),
-(6, '2021-10-01', 2),
-(16, '2021-10-02', 1057610935),
-(18, '2021-10-02', 1),
-(19, '2021-10-02', 1),
-(21, '2021-10-02', 9873),
-(22, '2021-10-02', 9873),
-(23, '2021-10-02', 1),
-(24, '2021-10-02', 1057610935),
-(25, '2021-10-02', 1057610935),
-(26, '2021-10-03', 1057610935),
-(27, '2021-10-03', 1057610935),
-(28, '2021-10-03', 1057610935),
-(29, '2021-10-03', 1057610935),
-(30, '2021-10-03', 1),
-(31, '2021-10-03', 9873),
+(41, '2021-10-06', 1558966),
+(40, '2021-10-06', 4277669),
+(39, '2021-10-06', 23581636),
 (32, '2021-10-03', 1057610935),
 (33, '2021-10-05', 1),
 (38, '2021-10-05', 1057610935);
@@ -107,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `detallecompra` (
   PRIMARY KEY (`id`),
   KEY `comprobanteId` (`comprobanteId`),
   KEY `itemId` (`itemId`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `detallecompra`
@@ -121,7 +106,16 @@ INSERT INTO `detallecompra` (`id`, `comprobanteId`, `itemId`, `cantidad`, `total
 (11, 38, 123, 2, 600),
 (12, 38, 123, 2, 600),
 (13, 38, 1, 3, 15000),
-(14, 38, 1, 3, 15000);
+(14, 38, 1, 3, 15000),
+(15, 39, 123, 1, 300),
+(16, 39, 2335, 2, 64000),
+(17, 39, 111, 1, 1500),
+(18, 40, 1, 2, 10000),
+(19, 40, 987, 12, 24),
+(20, 40, 678, 15, 1050),
+(21, 41, 1, 1, 5000),
+(22, 41, 123, 1, 300),
+(23, 41, 33, 1, 2500);
 
 -- --------------------------------------------------------
 
@@ -143,13 +137,12 @@ CREATE TABLE IF NOT EXISTS `item` (
 --
 
 INSERT INTO `item` (`Id`, `denominacion`, `descripcion`, `precio`) VALUES
-(123, 'metro', 'gcvhn', 300),
+(123, 'metro', '10 mts', 300),
 (678, 'chazo', 'pieza de acero inoxidable', 70),
 (2335, 'alambre', 'pieza de cobre', 32000),
 (987, 'silicona', '2', 2),
 (33, 'pegante', 'boxer', 2500),
-(111, 'jabon', '', 1500),
-(98765, 'boxer para delincuentes', 'malo para la salud', 2000),
+(111, 'jabon', 'liquido desinfectante', 1500),
 (1, 'puntilla bareta N5', 'Kilo', 5000);
 
 -- --------------------------------------------------------

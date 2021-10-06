@@ -15,11 +15,14 @@
           $user = $results;
       }
     }
+
+    //Codigo que permite insertar un cliente en la BD
     if(isset($_POST['addCliente_btn'])){
       require 'database.php';
       $message='';
       if(!empty($_POST['identificacion'])){
-        $sql = "INSERT INTO cliente (identificacion, nombre, apellidos, direccion, correo, telefono) VALUES (:identificacion, :nombre, :apellidos, :direccion, :correo, :telefono)";
+        $sql = "INSERT INTO cliente (identificacion, nombre, apellidos, direccion, correo, telefono) 
+        VALUES (:identificacion, :nombre, :apellidos, :direccion, :correo, :telefono)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':identificacion', $_POST['identificacion']);
         $stmt->bindParam(':nombre', $_POST['nombre']);

@@ -88,8 +88,11 @@
         </thead>
         <tbody>
           <?php
+          //Consulta que devuelve las facturas ordenadas desendentemente por id de comprobante
             require '../database.php';
-            $array = $conn->query("SELECT *, nombre from comprobante, cliente WHERE comprobante.idCliente = cliente.identificacion ORDER BY comprobante.id DESC");
+            $array = $conn->query("SELECT *, nombre 
+            from comprobante, cliente WHERE comprobante.idCliente = cliente.identificacion 
+            ORDER BY comprobante.id DESC");
             foreach($array as $mostrar){
           ?>
           <tr>

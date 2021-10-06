@@ -16,24 +16,26 @@
           $user = $results;
       }
     }
-    
+    //Funcion que debuelve el id, nombre de la tabla de cliente de la BD
     function getClientes(){
       require '../database.php';
       $consulta = $conn->query("SELECT identificacion, nombre FROM cliente");
       return $consulta;
     }
+    //Funcion que debuelve el ultimo id de la tabla de comprobante de la BD
     function getComprobantes(){
       require '../database.php';
       $consulta = $conn->query("SELECT MAX(id) AS id FROM comprobante");
       return $consulta;
     }
+    //Funcion que debuelve el id, nombre de la tabla de item de la BD
     function getItems(){
       require '../database.php';
       $consulta = $conn->query("SELECT Id, denominacion FROM item");
       return $consulta;
     }
 
-
+    //Codigo que al dar click en el boton registrar, guarda la fecha, identicacion cliente en la tabla de comprobante
       if(isset($_POST['addComprobante_btn'])){
         require '../database.php';
         $dia = 86400;
@@ -42,7 +44,7 @@
         $id = $_POST['idCliente'];
           for($i=0; $i<=$fecha; $i=$i+$dia){
             $fechaUno = date("Y-m-d");
-            $sql = "INSERT INTO comprobante (fecha, idCliente, total) VALUES (:fecha, '$id')";
+            $sql = "INSERT INTO comprobante (fecha, idCliente) VALUES (:fecha, '$id')";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':fecha', $fechaUno);
             if ($stmt->execute()) {
@@ -54,20 +56,22 @@
           }
           
         }
+        /*Codigo que al dar click en el boton registrar, guarda la identificacion del comprobante,
+         identicacion item, cantidad y el total en la tabla de detalle de comprobante*/
          if(isset($_POST['adddetalleComprobante_btn'])){
           require '../database.php';
           $msj='';
           $comprobanteId = $_POST['idComprobante'];
           $itemId = $_POST['idItem'];
           $cantidad = $_POST['cantidadItem'];
-          $sql = "INSERT INTO detallecompra (comprobanteId, itemId, cantidad, total) VALUES ('$comprobanteId', '$itemId', '$cantidad', 0)";
+          $sql = "INSERT INTO detallecompra (comprobanteId, itemId, cantidad, total) VALUES ('$comprobanteId',
+           '$itemId', '$cantidad', 0)";
           $stmt = $conn->prepare($sql);
           if ($stmt->execute()) {
             $msj = 'Detalle de compra Creado Satisfactoriamente ';
           } else {
             $msj = 'Lamentablemente no se pudo crear el detalle de esa compra!';
           }
-
         } 
         
 ?>
@@ -267,10 +271,12 @@
       </thead>
       <tbody>
       <?php 
+      //Consulta que devuelve el detalle de compra por pantalla
         require '../database.php';
         $comprobanteId = ( empty($_POST['idComprobante']) ) ? NULL : $_POST['idComprobante'];
         if(!empty($comprobanteId)){
-          $consulta = $conn->query("SELECT detallecompra.comprobanteId, item.denominacion, detallecompra.cantidad, item.precio, detallecompra.cantidad*item.precio AS Total FROM detallecompra, item 
+          $consulta = $conn->query("SELECT detallecompra.comprobanteId, item.denominacion, detallecompra.cantidad, item.precio, detallecompra.cantidad*item.precio AS Total 
+          FROM detallecompra, item 
           WHERE detallecompra.comprobanteId = '$comprobanteId' AND detallecompra.itemId = item.Id");
           foreach($consulta as $result){
             echo "<tr>
@@ -279,10 +285,12 @@
                 echo "<td>". $result['cantidad']."</td>";
                 echo "<td>". $result['precio']."</td>";
                 echo "<td>". $result['Total']."</td>";
-                
                 echo "<tr>";
-                $conn->query("UPDATE detallecompra, item, comprobante SET detallecompra.total = detallecompra.cantidad*item.precio WHERE detallecompra.itemId = item.Id AND detallecompra.comprobanteId =$comprobanteId");
+                //Consulta que actualiza el valor del total en la tabla de detalle de comprobante
+                $conn->query("UPDATE detallecompra, item, comprobante SET detallecompra.total = detallecompra.cantidad*item.precio 
+                WHERE detallecompra.itemId = item.Id AND detallecompra.comprobanteId =$comprobanteId");
             }
+            //Consulta que devuelve la Suma total del comprobante
               $suma = $conn->query("SELECT SUM(detallecompra.cantidad*item.precio) AS Suma FROM detallecompra, item 
               WHERE detallecompra.comprobanteId = '$comprobanteId' AND detallecompra.itemId = item.Id");
               foreach($suma as $var){
@@ -291,8 +299,6 @@
                 echo "<td>".$var['Suma']."</td>";
                 echo "</tr>";
             }
-            
-          
           }
           ?>
           </tbody>

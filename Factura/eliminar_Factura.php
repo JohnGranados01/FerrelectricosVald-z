@@ -88,14 +88,14 @@
         <div class="col-md-4 position-absulute">
           <label for="criterioBusqueda" class="form-label">Seleccione el criterio de busqueda:</label>
           <select class="form-select" id="criterioBusqueda" required>
-            <option selected disabled value="">Seleccione...</option>
+            <option selected disabled value="">OBLIGATORIO...</option>
             <option>Por id de factura</option>
           </select>
           <div class="valid-feedback">
-            Looks good!
+            Campo correcto!
           </div>
           <div class="invalid-feedback">
-            Please choose a unique and valid username.
+            Por favor seleccione la opcion.
           </div>
         </div>
         <div class="col-md-4 position-absulute">
@@ -111,12 +111,11 @@
                 ?>
               </select>
           <div class="valid-feedback">
-            Looks good!
-          </div>
+            Campo Correcto!
+          </div>        
           <div class="invalid-feedback">
-            Please choose a unique and valid username.
+            Por favor seleccione # Factura.
           </div>
-        
         </div>
       
         <div class="row">
@@ -130,15 +129,16 @@
       <br>
       
       <?php
+      /*Codigo que permite eliminar un comprobante por id
+      */ 
       if(isset($_GET['eliminar'])){
-
         require '../database.php';
         $id = $_GET['id'];
         $result= $conn->query("DELETE FROM comprobante WHERE id=$id");
-        $result= $conn->query("DELETE FROM detallecompra WHERE comprobanteId=$id");
-        
+       
         if(!empty($result)){
-          echo '<script language="javascript">alert("El comprobante de pago con id '.$id.' se eliminó con éxito");</script>';
+          echo '<script language="javascript">alert("El comprobante con id '.$id.
+          ' se eliminó con éxito");</script>';
         }else{
         }
       }

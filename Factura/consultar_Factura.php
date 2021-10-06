@@ -140,10 +140,13 @@
         <tbody>
 
       <?php
+      //Consulta que devuelve la informacion del comprobante
       if(isset($_GET['enviar'])){
         require '../database.php';
         $id = $_GET['id'];
-        $result= $conn->query("SELECT *, nombre FROM comprobante, cliente WHERE id=$id AND comprobante.idCliente = cliente.identificacion");
+        $result= $conn->query("SELECT *, nombre 
+        FROM comprobante, cliente 
+        WHERE id=$id AND comprobante.idCliente = cliente.identificacion");
         
         if(!empty($result)){
           foreach($result as $mostrar){ 
@@ -171,7 +174,9 @@
           </tr>
         </thead>
         <?php
-          $result2= $conn->query("SELECT *, cantidad, item.precio*detallecompra.cantidad as total FROM item, detallecompra, comprobante, cliente 
+        //Consulta que devuelve el detalle de compra del comprobante segun la id ingresada
+          $result2= $conn->query("SELECT *, cantidad, item.precio*detallecompra.cantidad as total 
+          FROM item, detallecompra, comprobante, cliente 
           WHERE detallecompra.comprobanteId=$id AND item.Id=detallecompra.itemId 
           AND detallecompra.comprobanteId=comprobante.id AND comprobante.idCliente = cliente.identificacion");
             foreach($result2 as $mostrar){
@@ -195,7 +200,9 @@
           </tr>
         </thead>
         <?php
-          $result3= $conn->query("SELECT SUM(item.precio*detallecompra.cantidad) as Total FROM item, detallecompra, comprobante, cliente
+        //Consulta que devuelve el total del comprobante
+          $result3= $conn->query("SELECT SUM(item.precio*detallecompra.cantidad) as Total 
+          FROM item, detallecompra, comprobante, cliente
           WHERE detallecompra.comprobanteId=$id AND item.Id=detallecompra.itemId 
                     AND detallecompra.comprobanteId=comprobante.id AND comprobante.idCliente = cliente.identificacion");
             foreach($result3 as $mostrar){
