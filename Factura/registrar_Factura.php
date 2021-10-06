@@ -42,7 +42,7 @@
         $id = $_POST['idCliente'];
           for($i=0; $i<=$fecha; $i=$i+$dia){
             $fechaUno = date("Y-m-d");
-            $sql = "INSERT INTO comprobante (fecha, idCliente, total) VALUES (:fecha, '$id')";
+            $sql = "INSERT INTO comprobante (fecha, idCliente, total) VALUES (:fecha, '$id', 0)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':fecha', $fechaUno);
             if ($stmt->execute()) {
